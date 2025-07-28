@@ -1,0 +1,13 @@
+/frontend
+  ┣ components/
+  ┣ pages/
+  ┣ services/
+  ┣ App.tsx
+  ┗ main.tsx
+
+/backend
+  ┣ controllers/
+  ┣ models/
+  ┣ routes/
+  ┣ utils/
+  ┗ server.js
