@@ -11,8 +11,7 @@ const connectDB = async () => {
     }
     
     const conn = await mongoose.connect(mongoUri);
-    // eslint-disable-next-line no-console
-    // console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(`Error: ${error.message}`);
