@@ -20,11 +20,11 @@ const pendingVerifications = new Map();
 export const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Admin email va parolni bloklash
+  // Admin email va parolni bloklash (admin faqat login orqali kirishi mumkin)
   const hardcodedAdminEmail = "mustafoyevdeveloper@gmail.com";
   if (email === hardcodedAdminEmail) {
     res.status(403);
-    throw new Error('Admin uchun ro\'yxatdan o\'tish taqiqlangan');
+    throw new Error('Admin uchun ro\'yxatdan o\'tish taqiqlangan. Faqat login orqali kirishingiz mumkin.');
   }
 
   // Validatsiya
@@ -78,15 +78,18 @@ export const login = asyncHandler(async (req, res) => {
     let adminUser = await User.findOne({ email: hardcodedAdminEmail });
     
     if (!adminUser) {
-      // Create admin user if it doesn't exist
+      // Create admin user if it doesn't exist (avval ro'yxatdan o'tmagan bo'lsa ham)
       adminUser = await User.create({
         name: "ADMIN",
         email: hardcodedAdminEmail,
         password: hardcodedAdminPassword,
         role: 'admin',
         isAdmin: true,
-        isActive: true
+        isActive: true,
+        isEmailVerified: true, // Admin uchun email tasdiqlangan deb hisoblanadi
+        createdAt: new Date()
       });
+      console.log('✅ Admin avtomatik yaratildi:', adminUser.email);
     }
     
     const token = jwt.sign({ id: adminUser._id, role: adminUser.role }, process.env.JWT_SECRET, {
