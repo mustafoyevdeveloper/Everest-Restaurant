@@ -69,9 +69,18 @@ export const signup = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  console.log('🔍 Login attempt:', { email, password: password ? '***' : 'undefined' });
+
   // --- Hardcoded Admin Check ---
   const hardcodedAdminEmail = "mustafoyevdeveloper@gmail.com";
   const hardcodedAdminPassword = "12345678!@WEB";
+
+  console.log('🔍 Checking hardcoded admin:', { 
+    providedEmail: email, 
+    hardcodedEmail: hardcodedAdminEmail,
+    emailMatch: email === hardcodedAdminEmail,
+    passwordMatch: password === hardcodedAdminPassword
+  });
 
   if (email === hardcodedAdminEmail && password === hardcodedAdminPassword) {
     // Find or create admin user in database
