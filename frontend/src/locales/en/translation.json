@@ -1741,9 +1741,11 @@
       "fetchError": "Error loading reservations",
       "statusUpdateError": "Error updating status",
       "deleteError": "Error deleting reservation",
+      "phone": "Phone",
+      "time": "Time",
       "details": {
-        "reservationInfo": "Reservation Info",
-        "customerInfo": "Customer Info",
+        "reservationInfo": "Reservation Information",
+        "customerInfo": "Customer Information",
         "notes": "Notes",
         "paymentDetails": "Payment Details",
         "statusHistory": "Status History",
@@ -2429,7 +2431,11 @@
     "noshow": "No Show",
     "seated": "Seated",
     "completed": "Completed",
-    "failed": "Failed"
+    "failed": "Failed",
+    "new": "New",
+    "read": "Read",
+    "replied": "Replied",
+    "closed": "Closed"
   },
   "currency_unit": "sum"
 } 

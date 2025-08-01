@@ -1815,6 +1815,8 @@
       "fetchError": "Zaxiralarni yuklashda xatolik",
       "statusUpdateError": "Status yangilashda xatolik",
       "deleteError": "Zaxirani o'chirishda xatolik",
+      "phone": "Telefon",
+      "time": "Vaqt",
       "details": {
         "reservationInfo": "Zaxira ma'lumotlari",
         "customerInfo": "Mijoz ma'lumotlari",
@@ -2347,7 +2349,11 @@
     "noshow": "Kelmadi",
     "seated": "O'tirgan",
     "completed": "Bajarildi",
-    "failed": "Xatolik"
+    "failed": "Xatolik",
+    "new": "Yangi",
+    "read": "O'qildi",
+    "replied": "Javob berildi",
+    "closed": "Yopildi"
   },
   "currency_unit": "so'm"
 } 
