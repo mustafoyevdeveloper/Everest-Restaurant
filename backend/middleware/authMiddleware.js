@@ -19,7 +19,7 @@ export const protect = asyncHandler(async (req, res, next) => {
         req.user = {
           _id: 'hardcoded_admin_id',
           name: 'ADMIN',
-          email: 'everestdevelopmet@gmail.com',
+          email: 'mustafoyevdeveloper@gmail.com',
           role: 'admin',
           isAdmin: true
         };

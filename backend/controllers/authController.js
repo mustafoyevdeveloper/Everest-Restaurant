@@ -21,7 +21,7 @@ export const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   // Admin email va parolni bloklash
-  const hardcodedAdminEmail = "everestdevelopmet@gmail.com";
+  const hardcodedAdminEmail = "mustafoyevdeveloper@gmail.com";
   if (email === hardcodedAdminEmail) {
     res.status(403);
     throw new Error('Admin uchun ro\'yxatdan o\'tish taqiqlangan');
@@ -70,7 +70,7 @@ export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // --- Hardcoded Admin Check ---
-  const hardcodedAdminEmail = "everestdevelopmet@gmail.com";
+  const hardcodedAdminEmail = "mustafoyevdeveloper@gmail.com";
   const hardcodedAdminPassword = "12345678!@WEB";
 
   if (email === hardcodedAdminEmail && password === hardcodedAdminPassword) {

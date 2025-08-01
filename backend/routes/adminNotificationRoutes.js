@@ -10,14 +10,14 @@ const router = express.Router();
 const getAdminId = async (userId) => {
   if (userId === 'hardcoded_admin_id') {
     // Find the admin user in database
-    const adminUser = await User.findOne({ email: 'everestrestaurantcook@gmail.com' });
+    const adminUser = await User.findOne({ email: 'mustafoyevdeveloper@gmail.com' });
     if (adminUser) {
       return adminUser._id;
     }
     // If admin user doesn't exist, create one
     const newAdmin = await User.create({
       name: 'ADMIN',
-      email: 'everestrestaurantcook@gmail.com',
+      email: 'mustafoyevdeveloper@gmail.com',
       password: '12345678!@WEB',
       role: 'admin',
       isAdmin: true,
