@@ -324,7 +324,7 @@ const AdminPayments: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{t('admin.payments.totalAmount', 'Umumiy summa')}</p>
-                <p className="text-xl md:text-2xl font-bold">{stats.totalAmount?.toLocaleString()} so'm</p>
+                <p className="text-xl md:text-2xl font-bold">{stats.totalAmount?.toLocaleString()} {t('currency_unit')}</p>
               </div>
               <CreditCard className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
             </div>

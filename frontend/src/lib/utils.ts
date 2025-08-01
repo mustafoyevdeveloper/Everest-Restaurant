@@ -111,22 +111,35 @@ export const getStatusText = (status: string) => {
 export const getAdminStatusText = (status: string) => {
   // Normalize status key (e.g. Pending -> pending)
   const key = status.replace(/([A-Z])/g, '_$1').replace(/^_/, '').toLowerCase();
+  
+  // Try admin_status first
+  const adminStatusKey = `admin_status.${key}`;
+  const adminStatusTranslated = i18n.t(adminStatusKey);
+  if (adminStatusTranslated && adminStatusTranslated !== adminStatusKey) {
+    return adminStatusTranslated;
+  }
+  
+  // Try status object
+  const statusKey = `status.${status}`;
+  const statusTranslated = i18n.t(statusKey);
+  if (statusTranslated && statusTranslated !== statusKey) {
+    return statusTranslated;
+  }
+  
   // Try orders, reservations, payments, messages
   const statusKeys = [
     `admin.orders.status_${key}`,
     `admin.reservations.status_${key}`,
     `admin.payments.status_${key}`,
     `admin.messages.status_${key}`,
-    `admin_status_${key}`,
     `payment_status_${key}`
   ];
+  
   for (const k of statusKeys) {
     const translated = i18n.t(k);
     if (translated && translated !== k) return translated;
   }
-  // Fallback to Uzbek if available
-  const uz = i18n.getResource('uz', 'translation', statusKeys[0]);
-  if (uz) return uz;
+  
   // Fallback to status itself
   return status;
 };
