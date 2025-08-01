@@ -26,6 +26,7 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+
 // Debug: Check environment variables
 console.log('🔍 Environment variables check:');
 console.log('- NODE_ENV:', process.env.NODE_ENV);
