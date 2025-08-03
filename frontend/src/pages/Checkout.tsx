@@ -517,8 +517,8 @@ const Checkout = () => {
                                         
                                         const newOrder = await createOrder(orderData);
                                         
-                                        // Now process the payment with the real order ID and card data
-                                        const paymentResponse = await fetch('/api/payments/card/order', {
+                                        // Now process the test payment with the real order ID and card data
+                                        const paymentResponse = await fetch('/api/payments/test/card/order', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',

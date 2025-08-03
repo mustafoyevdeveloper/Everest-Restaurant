@@ -468,8 +468,8 @@ export const createPaymentNotification = asyncHandler(async (paymentId, amount, 
   }
 }); 
 
-// Card payment for order
-export const createOrderCardPayment = asyncHandler(async (req, res) => {
+// Test card payment for order (without Payme)
+export const createTestOrderCardPayment = asyncHandler(async (req, res) => {
   const { orderId, cardData } = req.body;
   
   if (!orderId || !cardData) {
@@ -747,6 +747,154 @@ export const createReservationCardPayment = asyncHandler(async (req, res) => {
     console.error('Card payment error:', error);
     res.status(500);
     throw new Error('Failed to process card payment');
+  }
+});
+
+// Test card payment for order (without Payme)
+export const createTestOrderCardPayment = asyncHandler(async (req, res) => {
+  const { orderId, cardData } = req.body;
+  
+  if (!orderId || !cardData) {
+    res.status(400);
+    throw new Error('Order ID and card data are required');
+  }
+
+  // Validate card data
+  if (!cardData.cardNumber || !cardData.expiryDate || !cardData.cvv || !cardData.cardholderName) {
+    res.status(400);
+    throw new Error('All card fields are required');
+  }
+
+  // Check if orderId is a valid MongoDB ObjectId
+  const mongoose = await import('mongoose');
+  let order;
+  
+  if (mongoose.Types.ObjectId.isValid(orderId)) {
+    order = await Order.findById(orderId).populate('user');
+  } else {
+    res.status(400);
+    throw new Error('Invalid order ID format. Please complete the order first.');
+  }
+  
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+  if (order.user._id.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error('Not authorized to pay for this order');
+  }
+
+  if (order.isPaid) {
+    res.status(400);
+    throw new Error('Order is already paid');
+  }
+
+  try {
+    // Simulate test card payment processing (no Payme)
+    const paymentId = crypto.randomBytes(16).toString('hex');
+    const transactionId = `TEST_TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Create payment record
+    const payment = new Payment({
+      user: req.user._id,
+      order: orderId,
+      amount: order.totalPrice,
+      currency: 'UZS',
+      paymentMethod: 'Test Card',
+      status: 'Completed',
+      orderId: paymentId,
+      description: `Test card payment for order ${orderId}`,
+      
+      // Card payment data
+      cardData: {
+        cardNumber: cardData.cardNumber.slice(-4),
+        cardType: getCardType(cardData.cardNumber),
+        maskedNumber: `**** **** **** ${cardData.cardNumber.slice(-4)}`,
+        expiryDate: cardData.expiryDate,
+        cardholderName: cardData.cardholderName
+      },
+      
+      // Transaction data
+      transactionData: {
+        transactionId,
+        gateway: 'Test Gateway',
+        responseCode: '00',
+        responseMessage: 'Test Approved',
+        authorizationCode: `TEST_AUTH_${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        processedAt: new Date()
+      },
+      
+      // Metadata
+      metadata: {
+        ipAddress: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent'),
+        deviceInfo: req.get('User-Agent')?.includes('Mobile') ? 'Mobile' : 'Desktop',
+        location: req.get('CF-IPCountry') || 'Unknown',
+        timezone: req.get('X-Timezone') || 'Asia/Tashkent',
+        isTestPayment: true
+      },
+      
+      statusHistory: [{
+        status: 'Completed',
+        changedAt: new Date(),
+        reason: 'Test card payment successful',
+        note: 'Test payment processed successfully'
+      }]
+    });
+
+    await payment.save();
+
+    // Update order status
+    order.isPaid = true;
+    order.paymentStatus = 'Paid';
+    order.status = 'Confirmed';
+    await order.save();
+
+    // Create admin notification
+    const notification = new AdminNotification({
+      type: 'payment',
+      title: 'New Test Card Payment',
+      message: `Test card payment of ${order.totalPrice.toLocaleString()} UZS received for order #${orderId.slice(-6)}`,
+      data: {
+        orderId: order._id,
+        paymentId: payment._id,
+        amount: order.totalPrice,
+        paymentMethod: 'Test Card',
+        isTestPayment: true
+      }
+    });
+    await notification.save();
+
+    // Emit to admin
+    emitToAll('admin_notification', {
+      type: 'payment',
+      title: 'New Test Card Payment',
+      message: `Test card payment of ${order.totalPrice.toLocaleString()} UZS received for order #${orderId.slice(-6)}`,
+      data: {
+        orderId: order._id,
+        paymentId: payment._id,
+        amount: order.totalPrice,
+        paymentMethod: 'Test Card',
+        isTestPayment: true
+      }
+    });
+
+    res.json({
+      success: true,
+      data: {
+        paymentId: payment._id,
+        transactionId,
+        amount: order.totalPrice,
+        orderId: orderId,
+        isTestPayment: true
+      }
+    });
+  } catch (error) {
+    console.error('Test card payment error:', error);
+    res.status(500);
+    throw new Error('Failed to process test card payment');
   }
 });
 

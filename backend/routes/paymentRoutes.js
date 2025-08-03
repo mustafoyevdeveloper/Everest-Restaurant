@@ -4,6 +4,7 @@ import {
   createReservationPayment,
   createOrderCardPayment,
   createReservationCardPayment,
+  createTestOrderCardPayment,
   handlePaymeWebhook,
   getPaymentStatus,
   getUserPayments,
@@ -27,6 +28,7 @@ router.post('/order', createOrderPayment);
 router.post('/reservation', createReservationPayment);
 router.post('/card/order', createOrderCardPayment);
 router.post('/card/reservation', createReservationCardPayment);
+router.post('/test/card/order', createTestOrderCardPayment);
 router.get('/status/:paymentId', getPaymentStatus);
 router.get('/user', getUserPayments);
 
