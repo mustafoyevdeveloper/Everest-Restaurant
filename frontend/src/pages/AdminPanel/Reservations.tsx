@@ -490,34 +490,34 @@ const AdminReservations: React.FC = () => {
       <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Bron tafsilotlari</DialogTitle>
+            <DialogTitle>{t('admin_reservations_details_title')}</DialogTitle>
           </DialogHeader>
           {selectedReservation && (
             <div className="space-y-6">
               {/* Reservation Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h3 className="font-semibold mb-2">{t('admin.reservations.details.reservationInfo')}</h3>
+                  <h3 className="font-semibold mb-2">{t('admin_reservations_reservation_info')}</h3>
                   <div className="space-y-1 text-sm">
-                    <p><strong>ID:</strong> {selectedReservation.reservationCode ? selectedReservation.reservationCode : `#${selectedReservation._id.slice(-6)}`}</p>
-                    <p><strong>{t('admin.reservations.status')}:</strong> {getStatusBadge(selectedReservation.status)}</p>
-                    <p><strong>{t('admin.reservations.date')}:</strong> {new Date(selectedReservation.date).toLocaleDateString('uz-UZ')}</p>
-                    <p><strong>{t('admin.reservations.time')}:</strong> {selectedReservation.time}</p>
-                    <p><strong>{t('admin.reservations.details.guestsCount')}:</strong> {selectedReservation.guests} {t('admin.reservations.people')}</p>
-                    <p><strong>{t('admin.reservations.paymentStatus')}:</strong> {selectedReservation.isPaid ? t('admin.reservations.paid') : t('admin.reservations.unpaid')}</p>
+                    <p><strong>{t('admin_reservations_id')}:</strong> {selectedReservation.reservationCode ? selectedReservation.reservationCode : `#${selectedReservation._id.slice(-6)}`}</p>
+                    <p><strong>{t('admin_reservations_status')}:</strong> {getStatusBadge(selectedReservation.status)}</p>
+                    <p><strong>{t('admin_reservations_date')}:</strong> {new Date(selectedReservation.date).toLocaleDateString('uz-UZ')}</p>
+                    <p><strong>{t('admin_reservations_time')}:</strong> {selectedReservation.time}</p>
+                    <p><strong>{t('admin_reservations_guests')}:</strong> {selectedReservation.guests} {t('admin_reservations_people')}</p>
+                    <p><strong>{t('admin_reservations_payment_status')}:</strong> {selectedReservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}</p>
                     {selectedReservation.cancellationReason && (
-                      <p><strong>{t('admin.reservations.details.cancellationReason')}:</strong> {selectedReservation.cancellationReason}</p>
+                      <p><strong>{t('admin_reservations_cancellation_reason')}:</strong> {selectedReservation.cancellationReason}</p>
                     )}
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">{t('admin.reservations.details.customerInfo')}</h3>
+                  <h3 className="font-semibold mb-2">{t('admin_reservations_client_info')}</h3>
                   <div className="space-y-1 text-sm">
-                    <p><strong>{t('admin.reservations.customer')}:</strong> {selectedReservation.name}</p>
-                    <p><strong>Email:</strong> {selectedReservation.email}</p>
-                    <p><strong>{t('admin.reservations.phone')}:</strong> {selectedReservation.phone}</p>
+                    <p><strong>{t('admin_reservations_client')}:</strong> {selectedReservation.name}</p>
+                    <p><strong>{t('admin_reservations_email')}:</strong> {selectedReservation.email}</p>
+                    <p><strong>{t('admin_reservations_phone')}:</strong> {selectedReservation.phone}</p>
                     {selectedReservation.user && (
-                      <p><strong>{t('admin.reservations.details.registered')}:</strong> Ha</p>
+                      <p><strong>{t('admin_reservations_registered')}:</strong> {t('admin_reservations_yes')}</p>
                     )}
                   </div>
                 </div>
@@ -526,7 +526,7 @@ const AdminReservations: React.FC = () => {
               {/* Notes */}
               {selectedReservation.notes && (
                 <div>
-                  <h3 className="font-semibold mb-2">{t('admin.reservations.details.notes')}</h3>
+                  <h3 className="font-semibold mb-2">{t('admin_reservations_notes')}</h3>
                   <div className="p-3 bg-gray-50 dark:bg-slate-700 rounded">
                     <p className="text-sm">{selectedReservation.notes}</p>
                   </div>
@@ -535,27 +535,27 @@ const AdminReservations: React.FC = () => {
 
               {/* Payment Details */}
               <div>
-                <h3 className="font-semibold mb-2">{t('admin.reservations.details.paymentDetails')}</h3>
+                <h3 className="font-semibold mb-2">{t('admin_reservations_payment_info')}</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
-                    <span>{t('admin.reservations.details.pricePerGuest')}:</span>
+                    <span>{t('admin_reservations_price_per_guest')}:</span>
                     <span>{formatCurrency(selectedReservation.pricePerGuest)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>{t('admin.reservations.details.guestsCount')}:</span>
-                    <span>{selectedReservation.guests} {t('admin.reservations.people')}</span>
+                    <span>{t('admin_reservations_total_guests')}:</span>
+                    <span>{selectedReservation.guests} {t('admin_reservations_people')}</span>
                   </div>
                   <div className="flex justify-between font-semibold border-t pt-1">
-                    <span>{t('admin.reservations.details.total')}:</span>
+                    <span>{t('admin_reservations_total')}:</span>
                     <span>{formatCurrency(selectedReservation.totalPrice)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>{t('admin.reservations.details.paymentMethod')}:</span>
+                    <span>{t('admin_reservations_payment_method')}:</span>
                     <span>{selectedReservation.paymentMethod}</span>
                   </div>
                   {selectedReservation.paidAt && (
                     <div className="flex justify-between">
-                      <span>{t('admin.reservations.details.paymentTime')}:</span>
+                      <span>{t('admin_reservations_payment_time')}:</span>
                       <span>{formatDate(selectedReservation.paidAt)}</span>
                     </div>
                   )}
@@ -567,7 +567,7 @@ const AdminReservations: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-2 flex items-center">
                     <History className="w-4 h-4 mr-2" />
-                    {t('admin.reservations.details.statusHistory')}
+                    {t('admin_reservations_status_history')}
                   </h3>
                   <div className="space-y-2">
                     {selectedReservation.statusHistory.slice().reverse().map((history, index) => (
