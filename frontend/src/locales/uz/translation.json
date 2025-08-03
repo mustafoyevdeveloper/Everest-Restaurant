@@ -2465,6 +2465,7 @@
   
   "admin_reservations_status_changed_to": "Status o'zgartirildi",
   "admin_reservations_cancelled_by_user": "Foydalanuvchi tomonidan bekor qilindi",
+  "admin_reservations_cancelled_by_user_fixed": "Foydalanuvchi tomonidan bekor qilindi",
   "admin_reservations_reservation_created": "Rezervatsiya yaratildi",
   "admin_reservations_delete_reservation": "Zaxirani o'chirish",
   "admin_reservations_delete_confirm": "Bu zaxirani o'chirishni xohlaysizmi? Bu amalni qaytarib bo'lmaydi.",

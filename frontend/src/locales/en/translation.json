@@ -2484,6 +2484,7 @@
   
   "admin_reservations_status_changed_to": "Status changed to",
   "admin_reservations_cancelled_by_user": "Cancelled by user",
+  "admin_reservations_cancelled_by_user_fixed": "Cancelled by user",
   "admin_reservations_reservation_created": "Reservation created",
   "admin_reservations_delete_reservation": "Delete reservation",
   "admin_reservations_delete_confirm": "Are you sure you want to delete this reservation? This action cannot be undone.",

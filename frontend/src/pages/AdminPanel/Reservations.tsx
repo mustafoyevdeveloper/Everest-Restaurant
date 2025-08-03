@@ -587,7 +587,7 @@ const AdminReservations: React.FC = () => {
                           </p>
                           <p className="text-xs text-gray-500">
                             {history.note.includes('user') && history.status === 'Cancelled'
-                              ? t('admin_reservations_cancelled_by_user')
+                              ? t('admin_reservations_cancelled_by_user_fixed')
                               : history.note.includes('created')
                               ? t('admin_reservations_reservation_created')
                               : history.note.includes('changed')
