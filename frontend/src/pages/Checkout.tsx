@@ -473,11 +473,65 @@ const Checkout = () => {
                         <CardContent>
                             <PaymePayment
                                 amount={finalTotal}
-                                orderId={`order_${Date.now()}`}
-                                onSuccess={(paymentData) => {
-                                    console.log('Payment successful:', paymentData);
-                                    // Handle successful payment and submit order
-                                    handleSubmit(new Event('submit') as any);
+                                onSuccess={async (cardData) => {
+                                    try {
+                                        // Create order first
+                                        const orderData = {
+                                            orderItems: safeCartItems.map(item => ({
+                                                _id: item._id,
+                                                nameKey: item.nameKey,
+                                                name: getProductName(item),
+                                                quantity: item.quantity,
+                                                image: item.image,
+                                                price: item.price,
+                                            })),
+                                            shippingAddress,
+                                            itemsPrice: safeCartTotal,
+                                            taxPrice: 0,
+                                            shippingPrice: deliveryFee,
+                                            totalPrice: finalTotal,
+                                            paymentMethod: 'Card',
+                                            orderType,
+                                            pickupDetails: orderType === 'pickup' ? {
+                                                reservationId: selectedReservation?._id,
+                                                tableNumber: selectedReservation?.tableNumber,
+                                                specialInstructions: pickupDetails.specialInstructions
+                                            } : undefined
+                                        };
+                                        
+                                        const newOrder = await createOrder(orderData);
+                                        
+                                        // Now process the payment with the real order ID and card data
+                                        const paymentResponse = await fetch('/api/payments/card/order', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({
+                                                orderId: newOrder._id,
+                                                cardData: cardData
+                                            })
+                                        });
+                                        
+                                        if (paymentResponse.ok) {
+                                            toast({
+                                                title: t('checkout_success_title'),
+                                                description: t('checkout_success_desc', { orderId: newOrder._id }),
+                                            });
+                                            clearCart();
+                                            navigate(`/my-bookings`);
+                                        } else {
+                                            const errorData = await paymentResponse.json();
+                                            throw new Error(errorData.message || 'Payment failed');
+                                        }
+                                    } catch (err: any) {
+                                        toast({
+                                            title: t('checkout_error_title'),
+                                            description: err.message || t('checkout_error_desc'),
+                                            variant: 'destructive',
+                                        });
+                                    }
                                 }}
                                 onError={(error) => {
                                     console.error('Payment error:', error);

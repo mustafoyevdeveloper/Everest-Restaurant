@@ -13,7 +13,7 @@ interface PaymePaymentProps {
   orderId?: string;
   reservationId?: string;
   amount: number;
-  onSuccess?: () => void;
+  onSuccess?: (cardData?: any) => void;
   onFailure?: () => void;
   forceCardOnly?: boolean;
 }
@@ -145,6 +145,13 @@ const PaymePayment: React.FC<PaymePaymentProps> = ({
 
       if (cardData.cvv.length !== 3 && cardData.cvv.length !== 4) {
         throw new Error(t('payment_invalid_cvv'));
+      }
+
+      // If no orderId is provided, this means we need to create the order first
+      if (!orderId && !reservationId) {
+        // Call onSuccess with card data to trigger order creation first
+        onSuccess?.(cardData);
+        return;
       }
 
       const endpoint = orderId ? '/payments/card/order' : '/payments/card/reservation';

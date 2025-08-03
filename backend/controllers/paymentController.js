@@ -483,7 +483,19 @@ export const createOrderCardPayment = asyncHandler(async (req, res) => {
     throw new Error('All card fields are required');
   }
 
-  const order = await Order.findById(orderId).populate('user');
+  // Check if orderId is a valid MongoDB ObjectId
+  const mongoose = await import('mongoose');
+  let order;
+  
+  if (mongoose.Types.ObjectId.isValid(orderId)) {
+    // If it's a valid ObjectId, try to find the order
+    order = await Order.findById(orderId).populate('user');
+  } else {
+    // If it's not a valid ObjectId, it might be a temporary order ID
+    // In this case, we should create a new order or handle it differently
+    res.status(400);
+    throw new Error('Invalid order ID format. Please complete the order first.');
+  }
   
   if (!order) {
     res.status(404);
