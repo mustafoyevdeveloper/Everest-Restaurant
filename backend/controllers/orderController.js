@@ -71,7 +71,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     user: req.user._id,
     orderItems: orderItems.map(item => ({
       ...item,
-      name: item.nameKey,
+      name: item.name || item.nameKey || 'Mahsulot',
       product: item._id,
       _id: undefined
     })),
