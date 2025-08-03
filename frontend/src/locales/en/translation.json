@@ -2452,6 +2452,7 @@
   "admin_reservations_status_cancelled": "Cancelled",
   "admin_reservations_payment_paid": "Paid",
   "admin_reservations_payment_unpaid": "Unpaid",
+  "admin_reservations_payment_unpaid_fixed": "Unpaid",
   "admin_reservations_unpaid": "Unpaid",
   "admin_reservations_payment_status_unpaid": "Unpaid",
   "admin_reservations_payment_unpaid_status": "Unpaid",

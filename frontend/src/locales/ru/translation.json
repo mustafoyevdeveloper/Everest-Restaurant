@@ -1322,6 +1322,7 @@
   "admin_reservations_status_cancelled": "Отменено",
   "admin_reservations_payment_paid": "Оплачено",
   "admin_reservations_payment_unpaid": "Не оплачено",
+  "admin_reservations_payment_unpaid_fixed": "Не оплачено",
   "admin_reservations_unpaid": "Не оплачено",
   "admin_reservations_payment_status_unpaid": "Не оплачено",
   "admin_reservations_payment_unpaid_status": "Не оплачено",

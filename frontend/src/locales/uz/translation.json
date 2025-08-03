@@ -2424,6 +2424,7 @@
   "admin_reservations_status_cancelled": "Bekor qilingan",
   "admin_reservations_payment_paid": "To'langan",
   "admin_reservations_payment_unpaid": "To'lanmagan",
+  "admin_reservations_payment_unpaid_fixed": "To'lanmagan",
   "admin_reservations_unpaid": "To'lanmagan",
   "admin_reservations_payment_status_unpaid": "To'lanmagan",
   "admin_reservations_payment_unpaid_status": "To'lanmagan",

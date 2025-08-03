@@ -411,7 +411,7 @@ const AdminReservations: React.FC = () => {
                       {reservation.guests} {t('admin_reservations_people')}
                     </div>
                     <div className="text-sm text-gray-500">
-                      {reservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}
+                      {reservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}
                     </div>
                   </div>
                   <div className="text-right">
@@ -504,7 +504,7 @@ const AdminReservations: React.FC = () => {
                     <p><strong>{t('admin_reservations_date')}:</strong> {new Date(selectedReservation.date).toLocaleDateString('uz-UZ')}</p>
                     <p><strong>{t('admin_reservations_time')}:</strong> {selectedReservation.time}</p>
                     <p><strong>{t('admin_reservations_guests')}:</strong> {selectedReservation.guests} {t('admin_reservations_people')}</p>
-                    <p><strong>{t('admin_reservations_payment_status')}:</strong> {selectedReservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}</p>
+                    <p><strong>{t('admin_reservations_payment_status')}:</strong> {selectedReservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}</p>
                     {selectedReservation.cancellationReason && (
                       <p><strong>{t('admin_reservations_cancellation_reason')}:</strong> {selectedReservation.cancellationReason}</p>
                     )}

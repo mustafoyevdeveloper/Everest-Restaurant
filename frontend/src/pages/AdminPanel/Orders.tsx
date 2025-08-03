@@ -261,7 +261,7 @@ const AdminOrders: React.FC = () => {
               <SelectContent>
                 <SelectItem value="all">{t('admin.orders.allPayments', 'Barcha to\'lovlar')}</SelectItem>
                 <SelectItem value="paid">{t('admin.orders.paid', 'To\'langan')}</SelectItem>
-                <SelectItem value="unpaid">{t('admin_reservations_payment_unpaid')}</SelectItem>
+                <SelectItem value="unpaid">{t('admin_reservations_payment_unpaid_fixed')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -340,7 +340,7 @@ const AdminOrders: React.FC = () => {
                         {formatCurrency(order.totalPrice)}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {order.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}
+                        {order.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
@@ -438,7 +438,7 @@ const AdminOrders: React.FC = () => {
                       {order.orderItems.length} {t('admin.orders.productsCount', 'ta mahsulot')}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {order.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}
+                      {order.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}
                     </p>
                   </div>
                   <div className="text-right">
@@ -520,7 +520,7 @@ const AdminOrders: React.FC = () => {
                     <p><strong>ID:</strong> {selectedOrder.orderCode || selectedOrder._id.slice(-6)}</p>
                     <p><strong>{t('admin.orders.status', 'Status')}:</strong> {getStatusBadge(selectedOrder.status)}</p>
                     <p><strong>{t('admin.orders.date', 'Sana')}:</strong> {formatDate(selectedOrder.createdAt)}</p>
-                    <p><strong>{t('admin.orders.payment', 'To\'lov')}:</strong> {selectedOrder.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}</p>
+                    <p><strong>{t('admin.orders.payment', 'To\'lov')}:</strong> {selectedOrder.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}</p>
                     {selectedOrder.cancellationReason && (
                       <p><strong>{t('admin.orders.cancellationReason', 'Bekor qilish sababi')}:</strong> {selectedOrder.cancellationReason}</p>
                     )}
