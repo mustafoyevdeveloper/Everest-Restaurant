@@ -70,7 +70,11 @@ const MyBookings = () => {
   const handleCancelOrder = async (id: string) => {
     if (!window.confirm(t('mybookings_cancel_order_confirm'))) return;
     try {
-      await apiFetch(`/orders/${id}/cancel`, { method: 'PUT' });
+      const currentLanguage = localStorage.getItem('language') || 'en';
+      await apiFetch(`/orders/${id}/cancel`, { 
+        method: 'PUT',
+        body: JSON.stringify({ language: currentLanguage })
+      });
       toast({ title: t('toast_success'), description: t('mybookings_cancel_order_success') });
       fetchData(); // Refresh data
     } catch (error: unknown) {
@@ -94,7 +98,11 @@ const MyBookings = () => {
   const handleCancelReservation = async (id: string) => {
     if (!window.confirm(t('mybookings_cancel_reservation_confirm'))) return;
     try {
-      await apiFetch(`/reservations/${id}/cancel`, { method: 'PUT' });
+      const currentLanguage = localStorage.getItem('language') || 'en';
+      await apiFetch(`/reservations/${id}/cancel`, { 
+        method: 'PUT',
+        body: JSON.stringify({ language: currentLanguage })
+      });
       toast({ title: t('toast_success'), description: t('mybookings_cancel_reservation_success') });
       fetchData(); // Refresh data
     } catch (error: unknown) {

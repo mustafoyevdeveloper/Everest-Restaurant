@@ -214,13 +214,25 @@ export const cancelOrder = asyncHandler(async (req, res) => {
     throw new Error('Order cannot be cancelled at this stage');
   }
 
+  // Get language from request or default to English
+  const language = req.body.language || req.headers['accept-language'] || 'en';
+  
+  // Define cancellation messages in different languages
+  const cancellationMessages = {
+    en: 'Cancelled by user',
+    uz: 'Foydalanuvchi tomonidan bekor qilindi',
+    ru: 'Отменено пользователем'
+  };
+  
+  const cancellationMessage = cancellationMessages[language] || cancellationMessages.en;
+  
   order.status = 'Cancelled';
-  order.cancellationReason = reason || 'Cancelled by user';
+  order.cancellationReason = reason || cancellationMessage;
   order.statusHistory.push({
     status: 'Cancelled',
     changedAt: new Date(),
     changedBy: 'User',
-    note: reason || 'Cancelled by user'
+    note: reason || cancellationMessage
   });
 
   const updatedOrder = await order.save();

@@ -302,12 +302,24 @@ export const cancelReservation = asyncHandler(async (req, res) => {
   }
 
   reservation.status = 'Cancelled';
-  reservation.cancellationReason = reason || 'Cancelled by user';
+  // Get language from request or default to English
+  const language = req.body.language || req.headers['accept-language'] || 'en';
+  
+  // Define cancellation messages in different languages
+  const cancellationMessages = {
+    en: 'Cancelled by user',
+    uz: 'Foydalanuvchi tomonidan bekor qilindi',
+    ru: 'Отменено пользователем'
+  };
+  
+  const cancellationMessage = cancellationMessages[language] || cancellationMessages.en;
+  
+  reservation.cancellationReason = reason || cancellationMessage;
   reservation.statusHistory.push({
     status: 'Cancelled',
     changedAt: new Date(),
     changedBy: req.user.isAdmin ? 'Admin' : 'User',
-    note: reason || 'Cancelled by user'
+    note: reason || cancellationMessage
   });
 
   const updatedReservation = await reservation.save();
