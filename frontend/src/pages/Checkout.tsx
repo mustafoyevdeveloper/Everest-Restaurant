@@ -296,7 +296,10 @@ const Checkout = () => {
                         </CardHeader>
                         <CardContent>
                             <RadioGroup value={orderType} onValueChange={(value) => setOrderType(value as 'delivery' | 'pickup')} className="space-y-4">
-                                <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer">
+                                <div 
+                                    className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"
+                                    onClick={() => setOrderType('delivery')}
+                                >
                                     <RadioGroupItem value="delivery" id="delivery" />
                                     <div className="flex items-center gap-3 flex-1">
                                         <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
@@ -313,7 +316,10 @@ const Checkout = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer">
+                                <div 
+                                    className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"
+                                    onClick={() => setOrderType('pickup')}
+                                >
                                     <RadioGroupItem value="pickup" id="pickup" />
                                     <div className="flex items-center gap-3 flex-1">
                                         <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
