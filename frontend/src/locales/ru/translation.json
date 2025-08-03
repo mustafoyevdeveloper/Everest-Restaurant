@@ -1364,6 +1364,7 @@
   "admin_reservations_status_changed_to": "Статус изменен на",
   "admin_reservations_cancelled_by_user": "Отменено пользователем",
   "admin_reservations_cancelled_by_user_fixed": "Отменено пользователем",
+  "admin_reservations_cancellation_reason_cancelled_by_user": "Отменено пользователем",
   "admin_reservations_reservation_created": "Бронирование создано",
   "admin_reservations_delete_reservation": "Удалить бронирование",
   "admin_reservations_delete_confirm": "Вы уверены, что хотите удалить это бронирование? Это действие нельзя отменить.",

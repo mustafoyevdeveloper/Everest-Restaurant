@@ -522,7 +522,11 @@ const AdminOrders: React.FC = () => {
                     <p><strong>{t('admin.orders.date', 'Sana')}:</strong> {formatDate(selectedOrder.createdAt)}</p>
                     <p><strong>{t('admin.orders.payment', 'To\'lov')}:</strong> {selectedOrder.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}</p>
                     {selectedOrder.cancellationReason && (
-                      <p><strong>{t('admin.orders.cancellationReason', 'Bekor qilish sababi')}:</strong> {selectedOrder.cancellationReason}</p>
+                      <p><strong>{t('admin.orders.cancellationReason', 'Bekor qilish sababi')}:</strong> {
+                        selectedOrder.cancellationReason === 'Cancelled by user' 
+                          ? t('admin_reservations_cancellation_reason_cancelled_by_user')
+                          : selectedOrder.cancellationReason
+                      }</p>
                     )}
                   </div>
                 </div>

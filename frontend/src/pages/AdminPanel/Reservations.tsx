@@ -506,7 +506,11 @@ const AdminReservations: React.FC = () => {
                     <p><strong>{t('admin_reservations_guests')}:</strong> {selectedReservation.guests} {t('admin_reservations_people')}</p>
                     <p><strong>{t('admin_reservations_payment_status')}:</strong> {selectedReservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}</p>
                     {selectedReservation.cancellationReason && (
-                      <p><strong>{t('admin_reservations_cancellation_reason')}:</strong> {selectedReservation.cancellationReason}</p>
+                      <p><strong>{t('admin_reservations_cancellation_reason')}:</strong> {
+                        selectedReservation.cancellationReason === 'Cancelled by user' 
+                          ? t('admin_reservations_cancellation_reason_cancelled_by_user')
+                          : selectedReservation.cancellationReason
+                      }</p>
                     )}
                   </div>
                 </div>
