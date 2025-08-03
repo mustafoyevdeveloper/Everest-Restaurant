@@ -203,24 +203,24 @@ const AdminReservations: React.FC = () => {
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder={t('admin.reservations.search_by_id', 'ID orqali qidirish...')}
+              placeholder={t('admin_reservations_search_by_id')}
               className="w-full md:w-64 px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-slate-600 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
           <div className="flex items-center gap-4">
           <Filter className="w-5 h-5" />
-          <h3 className="font-semibold">{t('admin.reservations.filters')}</h3>
+          <h3 className="font-semibold">{t('admin_reservations_filters')}</h3>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-2">{t('admin.reservations.status')}</label>
+            <label className="block text-sm font-medium mb-2">{t('admin_reservations_status')}</label>
             <Select value={filters.status} onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}>
               <SelectTrigger>
-                <SelectValue placeholder={t('admin.reservations.allStatuses')} />
+                <SelectValue placeholder={t('admin_reservations_all_statuses')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('admin.reservations.allStatuses')}</SelectItem>
+                <SelectItem value="all">{t('admin_reservations_all_statuses')}</SelectItem>
                 {statusOptions.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -230,29 +230,29 @@ const AdminReservations: React.FC = () => {
             </Select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">{t('admin.reservations.paymentStatus')}</label>
+            <label className="block text-sm font-medium mb-2">{t('admin_reservations_payment_status')}</label>
             <Select value={filters.paymentStatus} onValueChange={(value) => setFilters(prev => ({ ...prev, paymentStatus: value }))}>
               <SelectTrigger>
-                <SelectValue placeholder={t('admin.reservations.allPayments')} />
+                <SelectValue placeholder={t('admin_reservations_all_payments')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('admin.reservations.allPayments')}</SelectItem>
-                <SelectItem value="paid">{t('admin.reservations.paid')}</SelectItem>
-                <SelectItem value="unpaid">{t('admin.reservations.unpaid')}</SelectItem>
+                <SelectItem value="all">{t('admin_reservations_all_payments')}</SelectItem>
+                <SelectItem value="paid">{t('admin_reservations_paid')}</SelectItem>
+                <SelectItem value="unpaid">{t('admin_reservations_unpaid')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">{t('admin.reservations.date')}</label>
+            <label className="block text-sm font-medium mb-2">{t('admin_reservations_date')}</label>
             <Select value={filters.dateRange} onValueChange={(value) => setFilters(prev => ({ ...prev, dateRange: value }))}>
               <SelectTrigger>
-                <SelectValue placeholder={t('admin.reservations.allDays')} />
+                <SelectValue placeholder={t('admin_reservations_all_days')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('admin.reservations.allDays')}</SelectItem>
-                <SelectItem value="today">{t('admin.reservations.today')}</SelectItem>
-                <SelectItem value="yesterday">{t('admin.reservations.yesterday')}</SelectItem>
-                <SelectItem value="week">{t('admin.reservations.lastWeek')}</SelectItem>
+                <SelectItem value="all">{t('admin_reservations_all_days')}</SelectItem>
+                <SelectItem value="today">{t('admin_reservations_today')}</SelectItem>
+                <SelectItem value="yesterday">{t('admin_reservations_yesterday')}</SelectItem>
+                <SelectItem value="week">{t('admin_reservations_last_week')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -267,7 +267,7 @@ const AdminReservations: React.FC = () => {
       ) : error ? (
         <div className="text-center py-8 text-red-500">{error}</div>
       ) : filteredReservations.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">{t('admin.reservations.noReservations')}</div>
+        <div className="text-center py-8 text-gray-500">{t('admin_reservations_no_reservations')}</div>
       ) : (
         <div className="space-y-4">
           {/* Desktop Table View */}
@@ -276,13 +276,13 @@ const AdminReservations: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-slate-700">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.reservation')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.customer')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.dateTime')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.guests')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.price')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.status')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.reservations.actions')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_reservation')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_customer')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_date_time')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_guests')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_price')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_status')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin_reservations_actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
