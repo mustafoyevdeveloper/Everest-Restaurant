@@ -28,9 +28,11 @@ router.post('/send-password-reset-code', sendPasswordResetCode);
 router.post('/verify-password-reset-code', verifyPasswordResetCode);
 router.post('/reset-password', resetPassword);
 
-// Google OAuth routes
-router.get('/google', googleAuth);
-router.get('/google/callback', googleAuthCallback);
+// Google OAuth routes (only if credentials are available)
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  router.get('/google', googleAuth);
+  router.get('/google/callback', googleAuthCallback);
+}
 
 // Protected routes
 router.get('/me', protect, me);
