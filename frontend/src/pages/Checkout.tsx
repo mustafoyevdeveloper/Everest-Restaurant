@@ -188,13 +188,16 @@ const Checkout = () => {
     };
 
     const getProductName = (item: any) => {
+        // Ensure we have a name field
+        const name = item.name || item.name_uz || item.name_ru || item.name_en || 'Mahsulot';
+        
         switch (i18n.language) {
             case 'ru':
-                return item.name_ru || item.name_uz || item.name_en || t('product_unknown_name');
+                return item.name_ru || item.name_uz || item.name_en || name;
             case 'en':
-                return item.name_en || item.name_uz || item.name_ru || t('product_unknown_name');
+                return item.name_en || item.name_uz || item.name_ru || name;
             default:
-                return item.name_uz || item.name_ru || item.name_en || item.name || 'Mahsulot';
+                return item.name_uz || item.name_ru || item.name_en || name;
         }
     };
 
@@ -481,6 +484,13 @@ const Checkout = () => {
                                 amount={finalTotal}
                                 onSuccess={async (cardData) => {
                                     try {
+                                        // Validate required fields
+                                        if (orderType === 'delivery') {
+                                            if (!shippingAddress.postalCode || !shippingAddress.region || !shippingAddress.district) {
+                                                throw new Error('Iltimos, barcha yetkazib berish ma\'lumotlarini to\'ldiring');
+                                            }
+                                        }
+                                        
                                         // Create order first
                                         const orderData = {
                                             orderItems: safeCartItems.map(item => ({
@@ -491,7 +501,7 @@ const Checkout = () => {
                                                 image: item.image,
                                                 price: item.price,
                                             })),
-                                            shippingAddress,
+                                            shippingAddress: orderType === 'delivery' ? shippingAddress : undefined,
                                             itemsPrice: safeCartTotal,
                                             taxPrice: 0,
                                             shippingPrice: deliveryFee,
