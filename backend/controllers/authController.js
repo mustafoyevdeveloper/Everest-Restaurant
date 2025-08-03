@@ -171,20 +171,38 @@ export const signup = asyncHandler(async (req, res) => {
   const adminEmail = process.env.ADMIN_EMAIL || "mustafoyevdevelopment@gmail.com";
   if (email === adminEmail) {
     res.status(403);
-    throw new Error('Admin uchun ro\'yxatdan o\'tish taqiqlangan. Faqat login orqali kirishingiz mumkin.');
+    const language = req.body.language || 'uz';
+    const errorMessage = language === 'ru' 
+      ? 'Регистрация для администратора запрещена. Вы можете войти только через форму входа.'
+      : language === 'en'
+      ? 'Registration for admin is forbidden. You can only log in through the login form.'
+      : 'Admin uchun ro\'yxatdan o\'tish taqiqlangan. Faqat login orqali kirishingiz mumkin.';
+    throw new Error(errorMessage);
   }
 
   // Validatsiya
   if (!name || !email || !password) {
     res.status(400);
-    throw new Error('Barcha maydonlar to\'ldirilishi kerak');
+    const language = req.body.language || 'uz';
+    const errorMessage = language === 'ru' 
+      ? 'Все поля должны быть заполнены'
+      : language === 'en'
+      ? 'All fields are required'
+      : 'Barcha maydonlar to\'ldirilishi kerak';
+    throw new Error(errorMessage);
   }
 
   // Kuchli parol siyosati
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!passwordRegex.test(password)) {
     res.status(400);
-    throw new Error('Parol kamida 8 ta belgidan iborat bo\'lishi, katta harf, kichik harf, raqam va maxsus belgi bo\'lishi kerak');
+    const language = req.body.language || 'uz';
+    const errorMessage = language === 'ru' 
+      ? 'Пароль должен содержать не менее 8 символов, включая заглавную букву, строчную букву, цифру и специальный символ'
+      : language === 'en'
+      ? 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character'
+      : 'Parol kamida 8 ta belgidan iborat bo\'lishi, katta harf, kichik harf, raqam va maxsus belgi bo\'lishi kerak';
+    throw new Error(errorMessage);
   }
 
   // Email formati tekshirish
@@ -197,7 +215,13 @@ export const signup = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email: email.toLowerCase() });
   if (userExists) {
     res.status(400);
-    throw new Error('Bu email allaqachon ro\'yxatdan o\'tgan');
+    const language = req.body.language || 'uz';
+    const errorMessage = language === 'ru' 
+      ? 'Этот email уже зарегистрирован'
+      : language === 'en'
+      ? 'This email is already registered'
+      : 'Bu email allaqachon ro\'yxatdan o\'tgan';
+    throw new Error(errorMessage);
   }
 
   // Foydalanuvchini vaqtincha xotirada saqlash (pending)
@@ -232,13 +256,26 @@ export const signup = asyncHandler(async (req, res) => {
     // Console ga ham kodni chiqaramiz (debug uchun)
     console.log(`🔐 Verification code for ${email}: ${verificationCode}`);
 
+    const language = req.body.language || 'uz';
+    const successMessage = language === 'ru' 
+      ? 'Код подтверждения отправлен. Проверьте вашу почту.'
+      : language === 'en'
+      ? 'Verification code sent. Please check your email.'
+      : 'Tasdiqlash kodi yuborildi. Emailingizni tasdiqlang.';
+    
     res.status(200).json({
-      message: 'Tasdiqlash kodi yuborildi. Emailingizni tasdiqlang.',
+      message: successMessage,
       email: email.toLowerCase(),
     });
   } catch (error) {
     res.status(500);
-    throw new Error('Tasdiqlash kodi yuborishda xatolik yuz berdi');
+    const language = req.body.language || 'uz';
+    const errorMessage = language === 'ru' 
+      ? 'Ошибка отправки кода подтверждения'
+      : language === 'en'
+      ? 'Error sending verification code'
+      : 'Tasdiqlash kodi yuborishda xatolik yuz berdi';
+    throw new Error(errorMessage);
   }
 });
 
@@ -289,7 +326,13 @@ export const login = asyncHandler(async (req, res) => {
 
   if (!user || !(await user.matchPassword(password))) {
     res.status(401);
-    throw new Error('Invalid email or password');
+    const language = req.body.language || 'uz';
+    const errorMessage = language === 'ru' 
+      ? 'Неверный email или пароль'
+      : language === 'en'
+      ? 'Invalid email or password'
+      : 'Noto\'g\'ri email yoki parol';
+    throw new Error(errorMessage);
   }
 
   // --- 2FA Admin Login Logic ---
