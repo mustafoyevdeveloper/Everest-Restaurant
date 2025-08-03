@@ -69,6 +69,7 @@ const formatCartData = (data: any): MenuItem[] => {
         ...item.product,
         quantity: item.quantity,
         cartItemId: item._id,
+        name: item.product.name_uz || item.product.name_ru || item.product.name_en || item.product.name || 'Mahsulot',
       }));
   }
   return [];
