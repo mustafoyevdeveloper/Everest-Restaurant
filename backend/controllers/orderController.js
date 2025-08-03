@@ -390,18 +390,19 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   });
 });
 
-// Delete order (admin only) - Only for cancelled orders
+// Delete order (user and admin) - Only for cancelled orders
 export const deleteOrder = asyncHandler(async (req, res) => {
-  if (!req.user.isAdmin) {
-    res.status(403);
-    throw new Error('Not authorized as an admin.');
-  }
-
   const order = await Order.findById(req.params.id);
   
   if (!order) {
     res.status(404);
     throw new Error('Order not found');
+  }
+
+  // Check if user owns this order or is admin
+  if (!req.user.isAdmin && order.user.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error('Not authorized to delete this order.');
   }
 
   // Only allow deletion of cancelled orders

@@ -16,6 +16,7 @@ const router = express.Router();
 router.post('/', protect, createReservation);
 router.get('/myreservations', protect, getMyReservations);
 router.put('/:id/cancel', protect, cancelReservation);
+router.delete('/:id', protect, deleteReservation);
 
 // Admin routes
 router.get('/admin', protect, admin, getAllReservations);

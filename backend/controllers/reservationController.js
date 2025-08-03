@@ -354,20 +354,21 @@ export const cancelReservation = asyncHandler(async (req, res) => {
   res.json(updatedReservation);
 });
 
-// @desc    Delete reservation (admin only) - Only for cancelled reservations
+// @desc    Delete reservation (user and admin) - Only for cancelled reservations
 // @route   DELETE /api/reservations/:id
-// @access  Private/Admin
+// @access  Private
 export const deleteReservation = asyncHandler(async (req, res) => {
-  if (!req.user.isAdmin) {
-    res.status(403);
-    throw new Error('Not authorized as an admin.');
-  }
-
   const reservation = await Reservation.findById(req.params.id);
   
   if (!reservation) {
     res.status(404);
     throw new Error('Reservation not found');
+  }
+
+  // Check if user owns this reservation or is admin
+  if (!req.user.isAdmin && reservation.user.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error('Not authorized to delete this reservation.');
   }
 
   // Only allow deletion of cancelled reservations

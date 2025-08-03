@@ -20,6 +20,7 @@ router.post('/', protect, createOrder);
 // Protected routes
 router.get('/myorders', protect, getMyOrders);
 router.put('/:id/cancel', protect, cancelOrder);
+router.delete('/:id', protect, deleteOrder);
 
 // Admin routes
 router.get('/admin', protect, admin, getAllOrders);
