@@ -369,27 +369,14 @@ const AdminOrders: React.FC = () => {
                         )}
                         
                         {order.status === 'Cancelled' && (
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
-                                <Trash className="w-4 h-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>{t('admin.orders.deleteOrder', 'Buyurtmani o\'chirish')}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  {t('admin.orders.deleteConfirm', 'Bu buyurtmani o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi.')}
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>{t('admin.orders.cancel', 'Bekor qilish')}</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteOrder(order._id)}>
-                                  {t('admin.orders.delete', 'O\'chirish')}
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-red-600 hover:text-red-700"
+                            onClick={() => handleDeleteOrder(order._id)}
+                          >
+                            <Trash className="w-4 h-4" />
+                          </Button>
                         )}
                       </div>
                     </td>
@@ -471,31 +458,14 @@ const AdminOrders: React.FC = () => {
                   </div>
                   
                   {order.status === 'Cancelled' && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                        >
-                          <Trash className="w-4 h-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>{t('admin.orders.deleteOrder', 'Buyurtmani o\'chirish')}</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            {t('admin.orders.deleteConfirm', 'Bu buyurtmani o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi.')}
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>{t('admin.orders.cancel', 'Bekor qilish')}</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteOrder(order._id)}>
-                            {t('admin.orders.delete', 'O\'chirish')}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                      onClick={() => handleDeleteOrder(order._id)}
+                    >
+                      <Trash className="w-4 h-4" />
+                    </Button>
                   )}
                 </div>
               </div>

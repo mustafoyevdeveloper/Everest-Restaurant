@@ -68,7 +68,6 @@ const MyBookings = () => {
   }, []);
 
   const handleCancelOrder = async (id: string) => {
-    if (!window.confirm(t('mybookings_cancel_order_confirm'))) return;
     try {
       const currentLanguage = localStorage.getItem('language') || 'en';
       await apiFetch(`/orders/${id}/cancel`, { 
@@ -84,7 +83,6 @@ const MyBookings = () => {
   };
 
   const handleDeleteOrder = async (id: string) => {
-    if (!window.confirm(t('mybookings_delete_order_confirm'))) return;
     try {
       await apiFetch(`/orders/${id}`, { method: 'DELETE' });
       toast({ title: t('toast_success'), description: t('mybookings_delete_order_success') });
@@ -96,7 +94,6 @@ const MyBookings = () => {
   };
 
   const handleCancelReservation = async (id: string) => {
-    if (!window.confirm(t('mybookings_cancel_reservation_confirm'))) return;
     try {
       const currentLanguage = localStorage.getItem('language') || 'en';
       await apiFetch(`/reservations/${id}/cancel`, { 
@@ -112,7 +109,6 @@ const MyBookings = () => {
   };
 
   const handleDeleteReservation = async (id: string) => {
-    if (!window.confirm(t('mybookings_delete_reservation_confirm'))) return;
     try {
       await apiFetch(`/reservations/${id}`, { method: 'DELETE' });
       toast({ title: t('toast_success'), description: t('mybookings_delete_reservation_success') });

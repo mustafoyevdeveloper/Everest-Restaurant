@@ -341,27 +341,14 @@ const AdminReservations: React.FC = () => {
                           )}
                           
                           {reservation.status === 'Cancelled' && (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
-                                  <Trash className="w-4 h-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>{t('admin_reservations_delete_reservation')}</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    {t('admin_reservations_delete_confirm')}
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>{t('admin_reservations_cancel')}</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => handleDeleteReservation(reservation._id)}>
-                                    {t('admin_reservations_delete')}
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-red-600 hover:text-red-700"
+                              onClick={() => handleDeleteReservation(reservation._id)}
+                            >
+                              <Trash className="w-4 h-4" />
+                            </Button>
                           )}
                         </div>
                       </td>
@@ -453,31 +440,14 @@ const AdminReservations: React.FC = () => {
                   </div>
                   
                   {reservation.status === 'Cancelled' && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                        >
-                          <Trash className="w-4 h-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>{t('admin_reservations_delete_reservation')}</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            {t('admin_reservations_delete_confirm')}
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>{t('admin_reservations_cancel')}</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteReservation(reservation._id)}>
-                                                          {t('admin_reservations_delete')}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                      onClick={() => handleDeleteReservation(reservation._id)}
+                    >
+                      <Trash className="w-4 h-4" />
+                    </Button>
                   )}
                 </div>
               </div>
