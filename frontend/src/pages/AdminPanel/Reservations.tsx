@@ -107,8 +107,8 @@ const AdminReservations: React.FC = () => {
       const reservationsData = data.data?.docs || data.data || [];
       setReservations(reservationsData);
     } catch (err: any) {
-      setError(err.message || t('admin.reservations.fetchError'));
-      toast({ title: t('admin.reservations.error'), description: err.message || t('admin.reservations.fetchError'), variant: 'destructive' });
+              setError(err.message || t('admin_reservations_fetch_error'));
+        toast({ title: t('admin_reservations_error'), description: err.message || t('admin_reservations_fetch_error'), variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -131,13 +131,13 @@ const AdminReservations: React.FC = () => {
       
       console.log('Status update response:', response);
       
-      toast({ title: t('admin.reservations.success'), description: t('admin.reservations.statusUpdated') });
+              toast({ title: t('admin_reservations_success'), description: t('admin_reservations_status_updated') });
       fetchReservations(); // Refresh the list
     } catch (err: any) {
       console.error('Status update error:', err);
       toast({ 
-        title: t('admin.reservations.error'), 
-        description: err.message || t('admin.reservations.statusUpdateError'), 
+                title: t('admin_reservations_error'),
+        description: err.message || t('admin_reservations_status_update_error'), 
         variant: 'destructive' 
       });
     } finally {
@@ -150,10 +150,10 @@ const AdminReservations: React.FC = () => {
       await apiFetch(`/reservations/admin/${reservationId}`, {
         method: 'DELETE'
       });
-      toast({ title: t('admin.reservations.success'), description: t('admin.reservations.deleted') });
+              toast({ title: t('admin_reservations_success'), description: t('admin_reservations_deleted') });
       fetchReservations(); // Refresh the list
     } catch (err: any) {
-      toast({ title: t('admin.reservations.error'), description: err.message || t('admin.reservations.deleteError'), variant: 'destructive' });
+              toast({ title: t('admin_reservations_error'), description: err.message || t('admin_reservations_delete_error'), variant: 'destructive' });
     }
   };
 
@@ -189,9 +189,9 @@ const AdminReservations: React.FC = () => {
   return (
     <div className="admin-section p-4 md:p-6">
       <div className="admin-header">
-        <h1 className="admin-title !text-black dark:!text-white">{t('admin.reservations.title')}</h1>
+                    <h1 className="admin-title !text-black dark:!text-white">{t('admin_reservations_title')}</h1>
         <Button variant="outline" size="sm" onClick={fetchReservations} className="admin-button">
-          <RefreshCw className="w-4 h-4 mr-2" /> {t('admin.reservations.refresh', 'Refresh')}
+                      <RefreshCw className="w-4 h-4 mr-2" /> {t('admin_reservations_refresh')}
         </Button>
       </div>
 
@@ -307,7 +307,7 @@ const AdminReservations: React.FC = () => {
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center text-sm text-gray-900 dark:text-white">
                           <Users className="w-4 h-4 mr-1" />
-                          {reservation.guests} {t('admin.reservations.people')}
+                          {reservation.guests} {t('admin_reservations_people')}
                         </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
@@ -315,7 +315,7 @@ const AdminReservations: React.FC = () => {
                           {formatCurrency(reservation.totalPrice)}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {reservation.isPaid ? t('admin.reservations.paid') : t('admin.reservations.unpaid')}
+                          {reservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid_fixed')}
                         </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
@@ -465,15 +465,15 @@ const AdminReservations: React.FC = () => {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>{t('admin.reservations.deleteReservation')}</AlertDialogTitle>
+                          <AlertDialogTitle>{t('admin_reservations_delete_reservation')}</AlertDialogTitle>
                           <AlertDialogDescription>
-                            {t('admin.reservations.deleteConfirm')}
+                            {t('admin_reservations_delete_confirm')}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>{t('admin.reservations.cancel')}</AlertDialogCancel>
+                          <AlertDialogCancel>{t('admin_reservations_cancel')}</AlertDialogCancel>
                           <AlertDialogAction onClick={() => handleDeleteReservation(reservation._id)}>
-                            {t('admin.reservations.delete')}
+                                                          {t('admin_reservations_delete')}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>

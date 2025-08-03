@@ -2542,5 +2542,14 @@
   "admin_reservations_guests": "Guests",
   "admin_reservations_price": "Price",
   "admin_reservations_status": "Status",
-  "admin_reservations_actions": "Actions"
+  "admin_reservations_actions": "Actions",
+  "admin_reservations_title": "Reservations",
+  "admin_reservations_refresh": "Refresh",
+  "admin_reservations_success": "Success",
+  "admin_reservations_error": "Error",
+  "admin_reservations_fetch_error": "Error loading reservations",
+  "admin_reservations_status_updated": "Status updated successfully",
+  "admin_reservations_status_update_error": "Error updating status",
+  "admin_reservations_deleted": "Reservation deleted",
+  "admin_reservations_delete_error": "Error deleting reservation"
 } 
