@@ -17,12 +17,37 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     // Get total revenue
     const revenueData = await Order.aggregate([
       { $match: { isPaid: true } },
-      { $group: { _id: null, total: { $sum: '$totalAmount' } } }
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
     ]);
     const totalRevenue = revenueData.length > 0 ? revenueData[0].total : 0;
     
+    // Get today's revenue
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayRevenueData = await Order.aggregate([
+      { $match: { isPaid: true, createdAt: { $gte: today } } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]);
+    const todayRevenue = todayRevenueData.length > 0 ? todayRevenueData[0].total : 0;
+    
+    // Get this month's revenue
+    const thisMonth = new Date();
+    thisMonth.setDate(1);
+    thisMonth.setHours(0, 0, 0, 0);
+    const monthRevenueData = await Order.aggregate([
+      { $match: { isPaid: true, createdAt: { $gte: thisMonth } } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]);
+    const monthRevenue = monthRevenueData.length > 0 ? monthRevenueData[0].total : 0;
+    
     // Get total users
     const totalUsers = await User.countDocuments({ role: 'user' });
+    
+    // Get today's orders
+    const todayOrders = await Order.countDocuments({ createdAt: { $gte: today } });
+    
+    // Get this month's orders
+    const monthOrders = await Order.countDocuments({ createdAt: { $gte: thisMonth } });
     
     // Get total products
     const totalProducts = await Product.countDocuments();
@@ -47,7 +72,11 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       success: true,
       data: {
         totalOrders,
+        todayOrders,
+        monthOrders,
         totalRevenue,
+        todayRevenue,
+        monthRevenue,
         totalUsers,
         totalProducts,
         recentOrders,

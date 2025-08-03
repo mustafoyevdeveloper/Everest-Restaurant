@@ -41,9 +41,10 @@ const Register = () => {
         description: t('register_code_sent_desc') 
       });
     } catch (error: any) {
+      // Backend dan kelgan xabarni to'g'ridan-to'g'ri ko'rsatish
       toast({ 
         title: t('register_fail_toast_title'), 
-        description: error.message || t('register_fail_toast_description'), 
+        description: error.message, 
         variant: 'destructive' 
       });
     } finally {

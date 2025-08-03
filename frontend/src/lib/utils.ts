@@ -6,7 +6,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number): string {
+export function formatCurrency(amount: number | null | undefined): string {
+  // Agar amount null, undefined yoki NaN bo'lsa, 0 qaytaramiz
+  if (amount === null || amount === undefined || isNaN(amount)) {
+    return new Intl.NumberFormat('uz-UZ', {
+      style: 'currency',
+      currency: 'UZS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(0);
+  }
+  
   return new Intl.NumberFormat('uz-UZ', {
     style: 'currency',
     currency: 'UZS',
