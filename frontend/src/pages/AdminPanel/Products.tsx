@@ -571,7 +571,7 @@ const AdminProducts: React.FC = () => {
               placeholder={t('admin.products.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-10 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-slate-600 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
           

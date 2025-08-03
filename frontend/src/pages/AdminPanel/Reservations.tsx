@@ -204,7 +204,7 @@ const AdminReservations: React.FC = () => {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('admin.reservations.search_by_id', 'ID orqali qidirish...')}
-              className="w-full md:w-64 px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring"
+              className="w-full md:w-64 px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-slate-600 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
           <div className="flex items-center gap-4">
