@@ -140,7 +140,7 @@ const Cart = () => {
         </div>
         
         <div className="lg:sticky lg:top-24 z-30">
-          <Card className="bg-white dark:glass-card shadow-lg">
+          <Card className="bg-white dark:bg-slate-700 shadow-lg">
             <CardHeader className="pb-3 md:pb-6">
               <CardTitle className="text-lg md:text-2xl font-display text-slate-800 dark:text-white">{t('order_summary')}</CardTitle>
             </CardHeader>
