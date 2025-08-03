@@ -349,15 +349,15 @@ const AdminReservations: React.FC = () => {
                               </AlertDialogTrigger>
                               <AlertDialogContent>
                                 <AlertDialogHeader>
-                                  <AlertDialogTitle>{t('admin.reservations.deleteReservation')}</AlertDialogTitle>
+                                  <AlertDialogTitle>{t('admin_reservations_delete_reservation')}</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    {t('admin.reservations.deleteConfirm')}
+                                    {t('admin_reservations_delete_confirm')}
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                  <AlertDialogCancel>{t('admin.reservations.cancel')}</AlertDialogCancel>
+                                  <AlertDialogCancel>{t('admin_reservations_cancel')}</AlertDialogCancel>
                                   <AlertDialogAction onClick={() => handleDeleteReservation(reservation._id)}>
-                                    {t('admin.reservations.delete')}
+                                    {t('admin_reservations_delete')}
                                   </AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
@@ -408,10 +408,10 @@ const AdminReservations: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                       <Users className="w-4 h-4 mr-1" />
-                      {reservation.guests} {t('admin.reservations.people')}
+                      {reservation.guests} {t('admin_reservations_people')}
                     </div>
                     <div className="text-sm text-gray-500">
-                      {reservation.isPaid ? t('admin.reservations.paid') : t('admin.reservations.unpaid')}
+                      {reservation.isPaid ? t('admin_reservations_payment_paid') : t('admin_reservations_payment_unpaid')}
                     </div>
                   </div>
                   <div className="text-right">
@@ -574,10 +574,28 @@ const AdminReservations: React.FC = () => {
                       <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-slate-700 rounded">
                         {getStatusIcon(history.status)}
                         <div className="flex-1">
-                          <p className="text-sm font-medium">{history.status}</p>
-                          <p className="text-xs text-gray-500">{history.note}</p>
+                          <p className="text-sm font-medium">
+                            {history.status === 'Cancelled' && history.note.includes('user') 
+                              ? t('admin_reservations_status_history_cancelled')
+                              : history.status === 'Pending' && history.note.includes('created')
+                              ? t('admin_reservations_status_history_pending')
+                              : history.status === 'Cancelled' && history.note.includes('changed')
+                              ? t('admin_reservations_status_history_cancelled')
+                              : history.status === 'Pending' && history.note.includes('changed')
+                              ? t('admin_reservations_status_history_pending')
+                              : history.status}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {history.note.includes('user') && history.status === 'Cancelled'
+                              ? t('admin_reservations_cancelled_by_user')
+                              : history.note.includes('created')
+                              ? t('admin_reservations_reservation_created')
+                              : history.note.includes('changed')
+                              ? `${t('admin_reservations_status_changed_to')} ${history.status}`
+                              : history.note}
+                          </p>
                           <p className="text-xs text-gray-400">
-                            {formatDate(history.changedAt)} - {history.changedBy}
+                            {formatDate(history.changedAt)} - {history.changedBy === 'System' ? t('admin_reservations_system') : history.changedBy === 'User' ? t('admin_reservations_user') : history.changedBy}
                           </p>
                         </div>
                       </div>
