@@ -59,7 +59,7 @@ const Cart = () => {
   if (cartItems.length === 0) {
     return (
       <div className="container mx-auto px-3 sm:px-4 py-6 md:py-8 text-center min-h-[calc(100vh-8rem)] flex flex-col justify-center items-center">
-        <div className="bg-white dark:glass-card p-6 md:p-10 text-center animate-fade-in max-w-2xl mx-auto rounded-lg shadow-lg">
+        <div className="bg-white dark:bg-slate-800 p-6 md:p-10 text-center animate-fade-in max-w-2xl mx-auto rounded-lg shadow-lg">
             <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center">
               <CreditCard className="h-8 w-8 md:h-10 md:w-10 text-slate-400 dark:text-gray-400" />
             </div>

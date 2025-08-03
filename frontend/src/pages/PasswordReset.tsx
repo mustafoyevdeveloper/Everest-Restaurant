@@ -8,11 +8,13 @@ import Footer from '@/components/Layout/Footer';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 const PasswordReset = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { manualLogin } = useAuth();
 
   const [step, setStep] = useState<'email' | 'code' | 'reset'>('email');
   const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ const PasswordReset = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/forgot-password', {
+      const res = await fetch('/api/auth/send-password-reset-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -50,13 +52,13 @@ const PasswordReset = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/verify-reset-code', {
+      const res = await fetch('/api/auth/verify-password-reset-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code }),
       });
       const data = await res.json();
-      if (res.ok && data.verified) {
+      if (res.ok && data.canResetPassword) {
         setStep('reset');
       } else {
         toast({ title: t('reset_fail_title'), description: data.message || t('reset_fail_desc'), variant: 'destructive' });
@@ -86,8 +88,19 @@ const PasswordReset = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        toast({ title: t('reset_success_title'), description: t('reset_success_desc') });
-        navigate('/login');
+        // Avtomatik login qilish
+        if (data.token && data.user) {
+          // AuthContext orqali login qilish
+          manualLogin(data.user, data.token);
+          
+          toast({ title: t('reset_success_title'), description: t('reset_success_desc') });
+          
+          // Home page ga yo'naltirish
+          navigate('/');
+        } else {
+          toast({ title: t('reset_success_title'), description: t('reset_success_desc') });
+          navigate('/login');
+        }
       } else {
         toast({ title: t('reset_fail_title'), description: data.message || t('reset_fail_desc'), variant: 'destructive' });
       }
@@ -101,7 +114,7 @@ const PasswordReset = () => {
       <Navbar />
       <div className="pt-32 pb-12 md:pt-40 md:pb-20">
         <div className="max-w-md mx-auto px-4 sm:px-6">
-          <div className="bg-white dark:glass-card shadow-lg rounded-lg p-8 animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 shadow-lg rounded-lg p-8 animate-fade-in">
             {step === 'email' && (
               <form onSubmit={handleSendCode} className="space-y-6">
                 <h2 className="text-xl font-bold mb-4 text-center">{t('reset_email_title')}</h2>
@@ -146,7 +159,7 @@ const PasswordReset = () => {
                     type={showConfirm ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={e => setConfirmPassword(e.target.value)}
-                    placeholder={t('set_password_confirm_placeholder')}
+                    placeholder={t('reset_confirm_password_placeholder')}
                     required
                   />
                   <button
@@ -160,7 +173,7 @@ const PasswordReset = () => {
                   </button>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : t('reset_set_password')}
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : t('reset_submit_button')}
                 </Button>
               </form>
             )}

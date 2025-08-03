@@ -134,7 +134,7 @@ const MyBookings = () => {
           </TabsList>
           
           <TabsContent value="orders" className="mt-4 md:mt-6">
-            <Card className="glass-card shadow-sm">
+            <Card className="dark:bg-slate-800 shadow-sm">
               <CardHeader className="pb-3 md:pb-6">
                 <CardTitle className="text-lg md:text-xl">{t('mybookings_your_orders_title')}</CardTitle>
               </CardHeader>
@@ -188,7 +188,7 @@ const MyBookings = () => {
           </TabsContent>
 
           <TabsContent value="reservations" className="mt-4 md:mt-6">
-            <Card className="glass-card shadow-sm">
+            <Card className="dark:bg-slate-800 shadow-sm">
               <CardHeader className="pb-3 md:pb-6">
                 <CardTitle className="text-lg md:text-xl">{t('mybookings_your_reservations_title')}</CardTitle>
               </CardHeader>

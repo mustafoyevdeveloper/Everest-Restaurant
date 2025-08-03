@@ -148,86 +148,27 @@ export const createProduct = asyncHandler(async (req, res) => {
 
 // PUT /api/products/:id (admin only)
 export const updateProduct = asyncHandler(async (req, res) => {
-  const {
-    name_uz, name_ru, name_en,
-    description_uz, description_ru, description_en,
-    price,
-    image,
-    category,
-    rating,
-    quantity,
-    isAvailable,
-    fullDescription,
-    types,
-    ingredients,
-    preparationMethod,
-    preparationTime,
-    calories,
-    allergens,
-    tags,
-    additionalImages,
-    metaTitle,
-    metaDescription
-  } = req.body;
+  const { id } = req.params;
+  const updateData = req.body;
 
-  // At least one language must be present
-  if (!name_uz && !name_ru && !name_en) {
-    res.status(400);
-    throw new Error('At least one language name is required');
-  }
-  if (!description_uz && !description_ru && !description_en) {
-    res.status(400);
-    throw new Error('At least one language description is required');
-  }
-
-  const updateData = {
-    name_uz, name_ru, name_en,
-    description_uz, description_ru, description_en,
-    price,
-    image,
-    category,
-    rating,
-    fullDescription,
-    types,
-    ingredients,
-    preparationMethod,
-    preparationTime,
-    calories,
-    allergens,
-    tags,
-    additionalImages,
-    metaTitle,
-    metaDescription,
-    lastModifiedBy: req.user._id
-  };
-
-  // Agar mahsulot mavjud emas qilib qo'yilsa, miqdorni 0 ga teng qilish
-  if (isAvailable !== undefined) {
-    updateData.isAvailable = isAvailable;
-    // Agar mavjud emas bo'lsa, miqdorni 0 ga teng qilish
-    if (isAvailable === false) {
-      updateData.quantity = 0;
-    } else if (quantity !== undefined) {
-      // Agar mavjud bo'lsa va miqdor kiritilgan bo'lsa, uni saqlash
-      updateData.quantity = quantity;
-    }
-  } else if (quantity !== undefined) {
-    // Agar faqat miqdor o'zgartirilayotgan bo'lsa
-    updateData.quantity = quantity;
-  }
-
-  const product = await Product.findByIdAndUpdate(
-    req.params.id,
-    updateData,
-    { new: true }
-  );
-
+  const product = await Product.findById(id);
+  
   if (!product) {
     res.status(404);
     throw new Error('Product not found');
   }
 
-  res.json(product);
+  // Update product
+  const updatedProduct = await Product.findByIdAndUpdate(
+    id,
+    updateData,
+    { new: true, runValidators: true }
+  );
+
+  res.json({
+    success: true,
+    data: updatedProduct
+  });
 });
 
 // DELETE /api/products/:id (admin only)

@@ -24,19 +24,22 @@ export const protect = asyncHandler(async (req, res, next) => {
           isAdmin: true
         };
       } else {
-        // Get user from the token
-        req.user = await User.findById(decoded.id).select('-password');
+        // Get user from the token with proper error handling
+        const user = await User.findById(decoded.id).select('-password');
+        if (!user) {
+          res.status(401);
+          throw new Error('User not found');
+        }
+        req.user = user;
       }
 
       next();
     } catch (error) {
-      console.error(error);
+      console.error('Token verification error:', error.message);
       res.status(401);
       throw new Error('Not authorized, token failed');
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401);
     throw new Error('Not authorized, no token');
   }

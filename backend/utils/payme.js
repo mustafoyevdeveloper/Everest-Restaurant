@@ -74,7 +74,7 @@ class PaymeService {
       // Validate the generated URL
       try {
         new URL(paymentUrl);
-      } catch (urlError) {
+      } catch {
         console.error('❌ Generated invalid URL:', paymentUrl);
         throw new Error('Failed to generate valid payment URL');
       }

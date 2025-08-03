@@ -246,6 +246,7 @@ export const handlePaymeWebhook = asyncHandler(async (req, res) => {
     // Update payment with all Payme data
     payment.status = 'Completed';
     payment.transactionId = transactionId;
+    payment.amount = amount; // Use the amount from result
     payment.completedAt = new Date();
     
     // Update transaction details

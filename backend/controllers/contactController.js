@@ -5,59 +5,42 @@ import { emitToAll } from '../utils/socketEmitter.js';
 
 // Create new contact message
 export const createContact = asyncHandler(async (req, res) => {
-  let { name, email, phone, message } = req.body;
-  // Agar foydalanuvchi login bo'lsa va phone bo'sh bo'lsa, user.phone ni ishlatamiz
-  if (req.user) {
-    if (!phone) phone = req.user.phone;
-    if (!name) name = req.user.name;
-    if (!email) email = req.user.email;
+  const { name, email, phone, message } = req.body;
+
+  // Validatsiya
+  if (!name || !email || !message) {
+    res.status(400);
+    throw new Error('Name, email va message talab qilinadi');
   }
-  
+
+  // Email formati tekshirish
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    res.status(400);
+    throw new Error('Noto\'g\'ri email formati');
+  }
+
+  // Contact yaratish
   const contact = await Contact.create({
     name,
-    email,
+    email: email.toLowerCase(),
     phone,
-    message,
-    userId: req.user?._id // Agar foydalanuvchi tizimga kirgan bo'lsa
+    message
   });
-  
-  // Create admin notification for new contact message
+
+  // Admin notification yaratish
   try {
-    // Get all admin users
-    const User = (await import('../models/User.js')).default;
-    const adminUsers = await User.find({ isAdmin: true });
-    
-    // Create notifications for all admins
-    for (const admin of adminUsers) {
-      await AdminNotification.createContactMessageNotification(contact._id, contact.name, admin._id);
-    }
-
-    // Emit socket event for real-time notification
-    emitToAll('contact_message', {
-      contactId: contact._id,
-      name: contact.name,
-      email: contact.email,
-      message: contact.message,
-      timestamp: new Date()
-    });
-
-    // Emit socket event for admin contact message
-    emitToAll('new_contact_message', { 
-      message: 'Yangi xabar keldi', 
-      contactId: contact._id,
-      contact: {
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone,
-        message: contact.message,
-        createdAt: contact.createdAt
-      }
-    });
-  } catch (notificationError) {
-    console.error('Failed to create contact message notification:', notificationError);
+    await createContactNotification(contact);
+  } catch (error) {
+    // Notification xatoligi contact yaratishni to'xtatmasin
+    console.error('Contact notification error:', error);
   }
-  
-  res.status(201).json(contact);
+
+  res.status(201).json({
+    success: true,
+    message: 'Xabar yuborildi. Tez orada siz bilan bog\'lanamiz.',
+    data: contact
+  });
 });
 
 // Get user's own contact messages

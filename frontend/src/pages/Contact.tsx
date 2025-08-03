@@ -225,7 +225,7 @@ const Contact = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           
           {/* Contact Form */}
-          <div className="bg-white dark:glass-card p-8 animate-fade-in rounded-lg shadow-xl">
+          <div className="bg-white dark:bg-slate-800 p-8 animate-fade-in rounded-lg shadow-xl">
             <h2 className="text-2xl font-display font-bold mb-6 text-slate-800 dark:text-white">{t('contact_form_title')}</h2>
             
             <Form {...form}>
@@ -309,7 +309,7 @@ const Contact = () => {
           
           {/* Contact Information */}
           <div className="space-y-8">
-            <div className="bg-white dark:glass-card p-8 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.2s' }}>
+            <div className="bg-white dark:bg-slate-800 p-8 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.2s' }}>
               <h2 className="text-2xl font-display font-bold mb-6 text-slate-800 dark:text-white">{t('contact_info_title')}</h2>
               
               <div className="space-y-6">
@@ -339,7 +339,7 @@ const Contact = () => {
               </div>
             </div>
             
-            <div className="bg-white dark:glass-card p-8 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.4s' }}>
+            <div className="bg-white dark:bg-slate-800 p-8 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.4s' }}>
               <h2 className="text-2xl font-display font-bold mb-6 text-slate-800 dark:text-white">{t('contact_hours_title')}</h2>
               
               <div className="space-y-4">
@@ -364,7 +364,7 @@ const Contact = () => {
         </div>
         
         {/* Map */}
-        <div className="mt-16 bg-white dark:glass-card p-2 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.6s' }}>
+        <div className="mt-16 bg-white dark:bg-slate-800 p-2 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.6s' }}>
           <div className="aspect-video w-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center rounded-md overflow-hidden">
             <iframe
               title="Everest Restaurant Location"
@@ -381,7 +381,7 @@ const Contact = () => {
 
         {/* User Messages Section - Only show if user is logged in */}
         {user && (
-          <div className="mt-16 bg-white dark:glass-card p-8 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.8s' }}>
+          <div className="mt-16 bg-white dark:bg-slate-800 p-8 animate-fade-in rounded-lg shadow-xl" style={{ animationDelay: '0.8s' }}>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-display font-bold text-slate-800 dark:text-white">

@@ -31,22 +31,24 @@ const getAdminId = async (userId) => {
 // @desc    Get all notifications for admin
 // @route   GET /api/admin/notifications
 // @access  Private/Admin
-const getNotifications = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+export const getNotifications = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 20, type, read } = req.query;
   
-  const adminId = await getAdminId(req.user._id);
-  const result = await AdminNotification.getNotifications(adminId, page, limit);
+  const query = { adminId: req.user._id };
+  if (type) query.type = type;
+  if (read !== undefined) query.read = read === 'true';
+  
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+    sort: { createdAt: -1 }
+  };
+
+  const notifications = await AdminNotification.paginate(query, options);
   
   res.json({
-    notifications: result.notifications,
-    pagination: {
-      page: result.page,
-      totalPages: result.totalPages,
-      total: result.total,
-      hasNext: result.page < result.totalPages,
-      hasPrev: result.page > 1
-    }
+    success: true,
+    data: notifications
   });
 });
 
@@ -62,25 +64,24 @@ const getUnreadCount = asyncHandler(async (req, res) => {
 // @desc    Mark notification as read
 // @route   PUT /api/admin/notifications/:id/read
 // @access  Private/Admin
-const markAsRead = asyncHandler(async (req, res) => {
-  const adminId = await getAdminId(req.user._id);
-  const notification = await AdminNotification.findById(req.params.id);
+export const markAsRead = asyncHandler(async (req, res) => {
+  const { notificationId } = req.params;
+  
+  const notification = await AdminNotification.findOneAndUpdate(
+    { _id: notificationId, adminId: req.user._id },
+    { read: true, readAt: new Date() },
+    { new: true }
+  );
   
   if (!notification) {
     res.status(404);
-    throw new Error('Xabar topilmadi');
+    throw new Error('Notification not found');
   }
   
-  // Check if notification belongs to the admin
-  if (notification.adminId.toString() !== adminId.toString()) {
-    res.status(403);
-    throw new Error('Bu xabarni o\'qish huquqiga ega emassiz');
-  }
-  
-  notification.read = true;
-  await notification.save();
-  
-  res.json({ message: 'Xabar o\'qilgan deb belgilandi' });
+  res.json({
+    success: true,
+    data: notification
+  });
 });
 
 // @desc    Mark multiple notifications as read
@@ -106,16 +107,15 @@ const markMultipleAsRead = asyncHandler(async (req, res) => {
 // @desc    Mark all notifications as read
 // @route   PUT /api/admin/notifications/mark-all-read
 // @access  Private/Admin
-const markAllAsRead = asyncHandler(async (req, res) => {
-  const adminId = await getAdminId(req.user._id);
+export const markAllAsRead = asyncHandler(async (req, res) => {
   const result = await AdminNotification.updateMany(
-    { adminId, read: false },
-    { read: true }
+    { adminId: req.user._id, read: false },
+    { read: true, readAt: new Date() }
   );
   
-  res.json({ 
-    message: `${result.modifiedCount} ta xabar o\'qilgan deb belgilandi`,
-    modifiedCount: result.modifiedCount
+  res.json({
+    success: true,
+    message: `${result.modifiedCount} notifications marked as read`
   });
 });
 

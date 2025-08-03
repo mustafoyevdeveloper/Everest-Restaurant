@@ -17,10 +17,14 @@ const sendEmail = async (options) => {
 
   // 2. Define the email options
   const mailOptions = {
-    from: `"${options.fromName}" <${process.env.EMAIL_USER}>`, // sender address
+    from: `"${options.fromName}" <noreply@everest.uz>`, // sender address - hide real email
     to: options.to, // list of receivers
     subject: options.subject, // Subject line
     html: options.html, // html body
+    headers: {
+      'X-Sender': process.env.EMAIL_USER, // Internal sender for SMTP
+      'X-Reply-To': 'noreply@everest.uz', // Hide reply-to email
+    }
   };
 
   // 3. Actually send the email

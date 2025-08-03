@@ -26,7 +26,7 @@ const TermsOfService = () => {
       
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-24">
-        <div className="bg-white dark:glass-card p-8 md:p-12 rounded-lg shadow-xl">
+        <div className="bg-white dark:bg-slate-800 p-8 md:p-12 rounded-lg shadow-xl">
           
           {/* Last Updated */}
           <div className="mb-8 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">

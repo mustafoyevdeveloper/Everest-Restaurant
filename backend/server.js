@@ -23,6 +23,7 @@ import { setIO } from './utils/socketEmitter.js';
 import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import passport from 'passport';
 
 dotenv.config();
 
@@ -93,6 +94,10 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false } // Set to true if using HTTPS
 }));
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Fix __dirname for ES modules (must be before any usage)

@@ -7,6 +7,7 @@ interface User {
   role?: string;
   password?: string;
   phone?: string;
+  isProfileComplete?: boolean;
 }
 
 interface AuthContextType {
@@ -15,6 +16,11 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   manualLogin: (user: User, token: string) => void;
   signup: (name: string, email: string, password: string) => Promise<User>;
+  verifyCode: (email: string, code: string) => Promise<{ redirectTo: string }>;
+  updateProfile: (phone: string) => Promise<void>;
+  sendPasswordResetCode: (email: string) => Promise<void>;
+  verifyPasswordResetCode: (email: string, code: string) => Promise<void>;
+  resetPassword: (email: string, newPassword: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
   error: string | null;
@@ -53,6 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(userData);
           setError(null);
         } else {
+          // Token is invalid, clear it
           localStorage.removeItem('token');
           localStorage.removeItem('isNewUser');
           setUser(null);
@@ -60,6 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setError(null);
         }
       } catch (error) {
+        // Network error or other issues
         localStorage.removeItem('token');
         localStorage.removeItem('isNewUser');
         setUser(null);
@@ -88,20 +96,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (response.ok) {
-      const data = await response.json();
+        const data = await response.json();
         setUser(data.user);
         setToken(data.token);
         setIsNewUser(false);
         localStorage.setItem('token', data.token);
         localStorage.setItem('isNewUser', 'false');
-      return data;
+        return data;
       } else {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
+        const errorMessage = errorData.message || 'Login failed';
+        setError(errorMessage);
+        throw new Error(errorMessage);
       }
     } catch (error: any) {
-      setError(error.message);
-      throw error;
+      const errorMessage = error.message || 'Login failed';
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -120,28 +131,187 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setError(null);
     
+    // Get current language
+    const currentLanguage = localStorage.getItem('i18nextLng') || 'uz';
+    
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, language: currentLanguage }),
       });
 
       if (res.ok) {
-      const data = await res.json();
-        setUser(data.user);
-        setToken(data.token);
+        const data = await res.json();
         setIsNewUser(true);
-      localStorage.setItem('token', data.token);
-        localStorage.setItem('isNewUser', 'true');
-      return data.user;
+        return data;
       } else {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'Signup failed');
+        const errorMessage = errorData.message || 'Signup failed';
+        setError(errorMessage);
+        throw new Error(errorMessage);
       }
     } catch (error: any) {
-      setError(error.message);
-      throw error;
+      const errorMessage = error.message || 'Signup failed';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyCode = async (email: string, code: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        setToken(data.token);
+        setIsNewUser(false);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('isNewUser', 'false');
+        return data;
+      } else {
+        const errorData = await res.json();
+        const errorMessage = errorData.message || 'Verification failed';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || 'Verification failed';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateProfile = async (phone: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ phone }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        return data;
+      } else {
+        const errorData = await res.json();
+        const errorMessage = errorData.message || 'Profile update failed';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || 'Profile update failed';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const sendPasswordResetCode = async (email: string) => {
+    setLoading(true);
+    setError(null);
+    
+    // Get current language
+    const currentLanguage = localStorage.getItem('i18nextLng') || 'uz';
+    
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/send-password-reset-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, language: currentLanguage }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      } else {
+        const errorData = await res.json();
+        const errorMessage = errorData.message || 'Failed to send reset code';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || 'Failed to send reset code';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyPasswordResetCode = async (email: string, code: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify-password-reset-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      } else {
+        const errorData = await res.json();
+        const errorMessage = errorData.message || 'Failed to verify reset code';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || 'Failed to verify reset code';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetPassword = async (email: string, newPassword: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, newPassword }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      } else {
+        const errorData = await res.json();
+        const errorMessage = errorData.message || 'Failed to reset password';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || 'Failed to reset password';
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -156,7 +326,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           headers: { Authorization: `Bearer ${token}` }
         });
       } catch (error) {
-        // Ignore
+        // Ignore logout errors
       }
     }
     localStorage.removeItem('token');
@@ -198,16 +368,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
       user, 
       token, 
-    loading,
-    error,
       login, 
-    manualLogin,
-      signup, 
+      manualLogin, 
+      signup,
+      verifyCode,
+      updateProfile,
+      sendPasswordResetCode,
+      verifyPasswordResetCode,
+      resetPassword,
       logout, 
-    updateUser,
-    isProfileComplete,
-    getProfileCompletionStatus,
-    isNewUser: isNewUserCheck,
+      loading, 
+      error,
+      updateUser,
+      isProfileComplete,
+      getProfileCompletionStatus,
+      isNewUser: isNewUserCheck
   };
 
   return (

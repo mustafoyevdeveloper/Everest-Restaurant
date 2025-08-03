@@ -79,7 +79,7 @@ const Login = () => {
       <Navbar />
       <div className="pt-32 pb-12 md:pt-40 md:pb-20">
         <div className="max-w-md mx-auto px-4 sm:px-6">
-          <div className="bg-white dark:glass-card shadow-lg rounded-lg p-8 animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 shadow-lg rounded-lg p-8 animate-fade-in">
             <h1 className="text-3xl font-bold mb-6 text-center">{t('login_title')}</h1>
             <p className="text-slate-600 dark:text-gray-400 text-center mb-6">{t('login_description')}</p>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

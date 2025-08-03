@@ -25,7 +25,7 @@ const PrivacyPolicy = () => {
       
       {/* Privacy Policy Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-24">
-        <div className="bg-white dark:glass-card p-8 animate-fade-in space-y-8 shadow-md">
+        <div className="bg-white dark:bg-slate-800 p-8 animate-fade-in space-y-8 shadow-md">
           <section>
             <h2 className="text-2xl font-display font-bold mb-4 text-slate-900 dark:text-white">{t('privacy_policy_information_collect_title')}</h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
