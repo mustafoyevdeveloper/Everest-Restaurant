@@ -115,11 +115,6 @@ const Login = () => {
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : t('login_form_submit_button')}
               </Button>
             </form>
-            <p className="mt-6 text-center text-gray-500">
-              {t('login_no_account')}{' '}
-              <Link to="/signup" className="text-yellow-500 hover:underline">{t('login_create_account')}</Link>
-            </p>
-            
             {/* Google OAuth Button */}
             <div className="mt-6">
               <div className="relative">
@@ -164,6 +159,11 @@ const Login = () => {
                 {t('login_with_google')}
               </Button>
             </div>
+            
+            <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
+              {t('login_no_account')}{' '}
+              <Link to="/signup" className="text-yellow-500 hover:text-yellow-400">{t('login_create_account')}</Link>
+            </p>
           </div>
         </div>
       </div>

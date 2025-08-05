@@ -159,9 +159,9 @@ const Register = () => {
                 </div>
                 
                 <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-base text-gray-600 dark:text-gray-400">
                     {t('register_already_have_account')}{' '}
-                    <a href="/login" className="text-blue-600 hover:text-blue-500">
+                    <a href="/login" className="text-yellow-500 hover:text-yellow-400">
                       {t('register_login_link')}
                     </a>
                   </p>
