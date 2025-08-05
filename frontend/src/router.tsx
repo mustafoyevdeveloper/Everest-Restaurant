@@ -29,6 +29,7 @@ const MyBookings = lazy(() => import('./pages/MyBookings'));
 const Verify = lazy(() => import('./pages/Verify'));
 const SetPassword = lazy(() => import('./pages/SetPassword'));
 const PasswordReset = lazy(() => import('./pages/PasswordReset'));
+const GoogleCallback = lazy(() => import('./pages/GoogleCallback'));
 
 // Lazy load admin pages
 // const Overview = lazy(() => import('./pages/Admin/Overview'));
@@ -222,6 +223,13 @@ const AppRouter = () => {
         {/* Auth routes without Navbar/Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
+        <Route path="/auth/google/callback" element={
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense fallback={<LoadingFallback />}>
+              <GoogleCallback />
+            </Suspense>
+          </ErrorBoundary>
+        } />
         
         {/* Not Found Route */}
         <Route path="*" element={<NotFound />} />

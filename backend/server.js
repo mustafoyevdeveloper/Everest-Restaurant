@@ -24,6 +24,7 @@ import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import passport from 'passport';
+import User from './models/User.js';
 
 dotenv.config();
 
@@ -98,6 +99,20 @@ app.use(session({
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Passport serialization
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
 
 
 // Fix __dirname for ES modules (must be before any usage)

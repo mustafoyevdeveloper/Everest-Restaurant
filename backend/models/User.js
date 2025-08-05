@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String },
   phone: { type: String },
+  googleId: { type: String, sparse: true }, // For Google OAuth
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   isActive: { type: Boolean, default: true },
   isEmailVerified: { type: Boolean, default: false }, // Changed to false for new users

@@ -21,6 +21,7 @@ interface AuthContextType {
   sendPasswordResetCode: (email: string) => Promise<void>;
   verifyPasswordResetCode: (email: string, code: string) => Promise<void>;
   resetPassword: (email: string, newPassword: string) => Promise<void>;
+  handleGoogleCallback: (token: string, userData: string) => void;
   logout: () => void;
   loading: boolean;
   error: string | null;
@@ -317,6 +318,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const handleGoogleCallback = (token: string, userData: string) => {
+    try {
+      const user = JSON.parse(decodeURIComponent(userData));
+      setUser(user);
+      setToken(token);
+      localStorage.setItem('token', token);
+      setError(null);
+      setIsNewUser(false);
+      localStorage.setItem('isNewUser', 'false');
+    } catch (error) {
+      setError('Failed to process Google authentication');
+    }
+  };
+
   const logout = async () => {
     setError(null);
     if (token) {
@@ -376,6 +391,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       sendPasswordResetCode,
       verifyPasswordResetCode,
       resetPassword,
+      handleGoogleCallback,
       logout, 
       loading, 
       error,
