@@ -610,7 +610,7 @@ const AdminMessages: React.FC = () => {
               {/* Notifications */}
               {selectedMessage.notifications && selectedMessage.notifications.length > 0 && (
                 <div>
-                  <Label className="text-sm font-medium">{t('admin.messages.notifications', 'Bildirishnomalar')}</Label>
+                  <Label className="text-sm font-medium">{t('admin.messages.notifications')}</Label>
                   <div className="mt-2 space-y-3">
                     {selectedMessage.notifications.map((notification, index) => (
                       <div key={index} className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">

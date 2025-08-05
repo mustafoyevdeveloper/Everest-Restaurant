@@ -136,7 +136,7 @@ export const createReservation = asyncHandler(async (req, res, next) => {
       `;
 
       await sendEmail({
-        to: 'mustafoyev7788@gmail.com',
+        to: process.env.ADMIN_EMAIL || 'mustafoyevdevelopment@gmail.com',
         subject: `New Pending Reservation from ${createdReservation.name}`,
         html: emailHtml,
         fromName: 'Everest Restaurant Reservations',

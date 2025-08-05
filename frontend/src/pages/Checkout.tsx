@@ -552,7 +552,7 @@ const Checkout = () => {
                                 onError={(error) => {
                                     console.error('Payment error:', error);
                                     toast({
-                                        title: t('payment_error'),
+                                        title: t('payment_error_title'),
                                         description: error.message || t('payment_failed'),
                                         variant: 'destructive'
                                     });

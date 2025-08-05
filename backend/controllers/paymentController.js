@@ -468,8 +468,8 @@ export const createPaymentNotification = asyncHandler(async (paymentId, amount, 
   }
 }); 
 
-// Test card payment for order (without Payme)
-export const createTestOrderCardPayment = asyncHandler(async (req, res) => {
+// Card payment for order
+export const createOrderCardPayment = asyncHandler(async (req, res) => {
   const { orderId, cardData } = req.body;
   
   if (!orderId || !cardData) {
@@ -483,19 +483,7 @@ export const createTestOrderCardPayment = asyncHandler(async (req, res) => {
     throw new Error('All card fields are required');
   }
 
-  // Check if orderId is a valid MongoDB ObjectId
-  const mongoose = await import('mongoose');
-  let order;
-  
-  if (mongoose.Types.ObjectId.isValid(orderId)) {
-    // If it's a valid ObjectId, try to find the order
-    order = await Order.findById(orderId).populate('user');
-  } else {
-    // If it's not a valid ObjectId, it might be a temporary order ID
-    // In this case, we should create a new order or handle it differently
-    res.status(400);
-    throw new Error('Invalid order ID format. Please complete the order first.');
-  }
+  const order = await Order.findById(orderId).populate('user');
   
   if (!order) {
     res.status(404);
@@ -530,7 +518,7 @@ export const createTestOrderCardPayment = asyncHandler(async (req, res) => {
       
       // Card payment data
       cardData: {
-        cardNumber: cardData.cardNumber.slice(-4), // Store only last 4 digits
+        cardNumber: cardData.cardNumber.slice(-4),
         cardType: getCardType(cardData.cardNumber),
         maskedNumber: `**** **** **** ${cardData.cardNumber.slice(-4)}`,
         expiryDate: cardData.expiryDate,
@@ -665,7 +653,7 @@ export const createReservationCardPayment = asyncHandler(async (req, res) => {
       
       // Card payment data
       cardData: {
-        cardNumber: cardData.cardNumber.slice(-4), // Store only last 4 digits
+        cardNumber: cardData.cardNumber.slice(-4),
         cardType: getCardType(cardData.cardNumber),
         maskedNumber: `**** **** **** ${cardData.cardNumber.slice(-4)}`,
         expiryDate: cardData.expiryDate,

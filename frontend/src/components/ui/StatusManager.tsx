@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2, Settings } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface StatusOption {
   value: string;
@@ -29,6 +30,7 @@ const StatusManager: React.FC<StatusManagerProps> = ({
   isLoading = false,
   size = 'md'
 }) => {
+  const { t } = useTranslation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
   const [note, setNote] = useState('');
@@ -99,14 +101,14 @@ const StatusManager: React.FC<StatusManagerProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Status yangilash</DialogTitle>
+          <DialogTitle>{t('admin_status_update_title')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <Label htmlFor="status">Yangi status</Label>
+            <Label htmlFor="status">{t('admin_status_new_status')}</Label>
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
               <SelectTrigger>
-                <SelectValue placeholder="Statusni tanlang" />
+                <SelectValue placeholder={t('admin_status_new_status')} />
               </SelectTrigger>
               <SelectContent>
                 {statusOptions.map((option) => (
@@ -121,10 +123,10 @@ const StatusManager: React.FC<StatusManagerProps> = ({
           </div>
           
           <div>
-            <Label htmlFor="note">Izoh (ixtiyoriy)</Label>
+            <Label htmlFor="note">{t('admin_status_comment')}</Label>
             <Textarea
               id="note"
-              placeholder="Status o'zgarishi haqida izoh qoldiring..."
+              placeholder={t('admin_status_comment_placeholder')}
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={3}
@@ -140,7 +142,7 @@ const StatusManager: React.FC<StatusManagerProps> = ({
                 setNote('');
               }}
             >
-              Bekor qilish
+              {t('admin_status_cancel')}
             </Button>
             <Button
               onClick={handleStatusUpdate}
@@ -149,10 +151,10 @@ const StatusManager: React.FC<StatusManagerProps> = ({
               {isUpdating ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Yangilanmoqda...
+                  {t('admin_status_updating')}
                 </>
               ) : (
-                'Yangilash'
+                t('admin_status_update')
               )}
             </Button>
           </div>

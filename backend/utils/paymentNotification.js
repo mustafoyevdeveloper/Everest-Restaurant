@@ -111,7 +111,7 @@ class PaymentNotificationService {
       `;
 
       await sendEmail({
-        to: process.env.ADMIN_EMAIL || 'mustafoyev7788@gmail.com',
+        to: process.env.ADMIN_EMAIL || 'mustafoyevdevelopment@gmail.com',
         subject: emailSubject,
         html: emailHtml,
         fromName: 'Everest Payments',

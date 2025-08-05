@@ -68,6 +68,37 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(5);
 
+    // Get order status counts
+    const orderStatusCounts = await Order.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Get reservation status counts
+    const reservationStatusCounts = await Reservation.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Convert to object format
+    const orderStatuses = {};
+    orderStatusCounts.forEach(item => {
+      orderStatuses[item._id] = item.count;
+    });
+
+    const reservationStatuses = {};
+    reservationStatusCounts.forEach(item => {
+      reservationStatuses[item._id] = item.count;
+    });
+
     res.json({
       success: true,
       data: {
@@ -81,7 +112,9 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         totalProducts,
         recentOrders,
         recentPayments,
-        recentReservations
+        recentReservations,
+        orderStatuses,
+        reservationStatuses
       }
     });
   } catch (error) {

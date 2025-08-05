@@ -61,7 +61,35 @@ const AdminDashboard: React.FC = () => {
     setLoading(true);
     try {
       const data = await apiFetch('/admin/dashboard/stats');
-      setStats(data);
+      
+      // Transform backend data to match frontend interface
+      const transformedStats = {
+        totalOrders: data.totalOrders || 0,
+        todayOrders: data.todayOrders || 0,
+        thisMonthOrders: data.monthOrders || 0,
+        totalRevenue: data.totalRevenue || 0,
+        todayRevenue: data.todayRevenue || 0,
+        thisMonthRevenue: data.monthRevenue || 0,
+        pendingOrders: data.orderStatuses?.Pending || 0,
+        deliveredOrders: data.orderStatuses?.Delivered || 0,
+        cancelledOrders: data.orderStatuses?.Cancelled || 0,
+        totalReservations: data.recentReservations?.length || 0,
+        todayReservations: 0, // Will be calculated if needed
+        confirmedReservations: data.reservationStatuses?.Confirmed || 0,
+        cancelledReservations: data.reservationStatuses?.Cancelled || 0,
+        totalUsers: data.totalUsers || 0,
+        newUsers: 0, // Will be calculated if needed
+        unreadMessages: 0, // Will be calculated if needed
+        recentOrders: data.recentOrders || [],
+        recentReservations: data.recentReservations || [],
+        recentCancellations: [], // Will be calculated if needed
+        statusBreakdown: {
+          orders: data.orderStatuses || {},
+          reservations: data.reservationStatuses || {}
+        }
+      };
+      
+      setStats(transformedStats);
     } catch (err: any) {
       console.error('Dashboard stats error:', err);
       setError(err.message || t('admin.dashboard.statsError'));
@@ -190,19 +218,19 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.pending')}</span>
               <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
-                {stats.pendingOrders}
+                {stats.statusBreakdown.orders.Pending || 0}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.delivered')}</span>
               <Badge variant="outline" className="bg-green-50 text-green-700">
-                {stats.deliveredOrders}
+                {stats.statusBreakdown.orders.Delivered || 0}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.cancelled')}</span>
               <Badge variant="outline" className="bg-red-50 text-red-700">
-                {stats.cancelledOrders}
+                {stats.statusBreakdown.orders.Cancelled || 0}
               </Badge>
             </div>
           </CardContent>
@@ -216,19 +244,19 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.confirmed')}</span>
               <Badge variant="outline" className="bg-blue-50 text-blue-700">
-                {stats.confirmedReservations}
+                {stats.statusBreakdown.reservations.Confirmed || 0}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.cancelled')}</span>
               <Badge variant="outline" className="bg-red-50 text-red-700">
-                {stats.cancelledReservations}
+                {stats.statusBreakdown.reservations.Cancelled || 0}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.total')}</span>
               <Badge variant="outline">
-                {stats.totalReservations}
+                {Object.values(stats.statusBreakdown.reservations).reduce((a: number, b: number) => a + b, 0)}
               </Badge>
             </div>
           </CardContent>

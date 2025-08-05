@@ -69,6 +69,33 @@
     font-family: 'Playfair Display', serif;
   }
 
+  /* Input field styling for light mode */
+  input, textarea, select {
+    @apply bg-white text-gray-900 border-gray-300 placeholder-gray-500;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    @apply bg-white text-gray-900 border-primary ring-primary/20;
+  }
+
+  /* Dark mode overrides */
+  .dark input, .dark textarea, .dark select {
+    @apply bg-gray-800 text-white border-gray-600 placeholder-gray-400;
+  }
+
+  .dark input:focus, .dark textarea:focus, .dark select:focus {
+    @apply bg-gray-800 text-white border-primary ring-primary/20;
+  }
+
+  /* Ensure input text is always visible */
+  input::placeholder, textarea::placeholder {
+    @apply text-gray-500;
+  }
+
+  .dark input::placeholder, .dark textarea::placeholder {
+    @apply text-gray-400;
+  }
+
   /* Mobile responsive table styles */
   .admin-table {
     @apply w-full;

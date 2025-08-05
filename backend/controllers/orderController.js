@@ -165,7 +165,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     `;
 
     await sendEmail({
-      to: 'mustafoyev7788@gmail.com', // Admin's email
+      to: process.env.ADMIN_EMAIL || 'mustafoyevdevelopment@gmail.com', // Admin's email
       subject: `New Order Received - #${createdOrder.orderCode}`,
       html: emailHtml,
       fromName: 'Everest Restaurant Orders'

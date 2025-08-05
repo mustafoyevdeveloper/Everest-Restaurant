@@ -106,13 +106,13 @@ const PaymePayment: React.FC<PaymePaymentProps> = ({
       
       if (err.message) {
         if (err.message.includes('timeout')) {
-          errorMessage = 'To\'lov tizimi vaqt tugadi. Iltimos, qaytadan urining.';
+          errorMessage = t('payment_timeout_error');
         } else if (err.message.includes('network')) {
-          errorMessage = 'Tarmoq xatoligi. Internet aloqasini tekshiring.';
+          errorMessage = t('payment_network_error');
         } else if (err.message.includes('500')) {
-          errorMessage = 'Server xatoligi. Iltimos, keyinroq urinib ko\'ring.';
+          errorMessage = t('payment_server_error');
         } else if (err.message.includes('Invalid payment URL')) {
-          errorMessage = 'To\'lov tizimi vaqtincha ishlamayapti. Iltimos, keyinroq urinib ko\'ring.';
+          errorMessage = t('payment_system_error');
         } else {
           errorMessage = err.message;
         }
@@ -120,7 +120,7 @@ const PaymePayment: React.FC<PaymePaymentProps> = ({
       
       setError(errorMessage);
       toast({
-        title: t('payment_error'),
+        title: t('payment_error_title'),
         description: errorMessage,
         variant: 'destructive'
       });
@@ -185,7 +185,7 @@ const PaymePayment: React.FC<PaymePaymentProps> = ({
       console.error('Card payment error:', err);
       setError(err.message || t('payment_card_failed'));
       toast({
-        title: t('payment_error'),
+        title: t('payment_error_title'),
         description: err.message || t('payment_card_failed'),
         variant: 'destructive'
       });

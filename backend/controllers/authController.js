@@ -147,7 +147,7 @@ const getEmailTemplate = (type, code, language = 'uz') => {
                   ? '• Никогда не делитесь этим кодом с другими<br>• Код действителен только 10 минут<br>• Если вы не запрашивали код, немедленно смените пароль<br>• Everest Restaurant никогда не запрашивает код через приложение в телефоне'
                   : language === 'en' 
                   ? '• Never share this code with anyone<br>• Code is valid for only 10 minutes<br>• If you did not request this code, change your password immediately<br>• Everest Restaurant never asks for a code via the phone app'
-                  : '• Bu kodni hech kimga bermang<br>• Kod faqat 10 daqiqa amal qiladi<br>• Agar siz kod so\'ramagan bo\'lsangiz, darhol parolni o\'zgartiring<br>• Everest Restaurant hech qachon telefon ilovasida orqali kod so\'ramaydi'
+                  : '• Bu kodni hech kimga bermang<br>• Kod faqat 10 daqiqa amal qiladi<br>• Agar siz kod so\'ramagan bo\'lsangiz, darhol parolni o\'zgartiring<br>• Everest Restaurant hech qachon telefon ilovasi orqali kod so\'ramaydi'
                 }
               </p>
             </div>

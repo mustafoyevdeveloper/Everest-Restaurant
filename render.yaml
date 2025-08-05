@@ -21,8 +21,10 @@ services:
         value: https://everestrestaurantglobalcooking.vercel.app
       - key: BACKEND_URL
         value: https://everestrestaurantglobalcookmail.onrender.com
+      - key: ADMIN_EMAIL
+        value: mustafoyevdevelopment@gmail.com
       - key: EMAIL_USER
-        value: mustafoyevdeveloper@gmail.com
+        value: mustafoyevdevelopment@gmail.com
       - key: EMAIL_PASS
         value: lcsd wbpv ksup gdjd
       - key: PAYME_MERCHANT_ID
@@ -32,6 +34,6 @@ services:
       - key: SOCKET_CORS_ORIGIN
         value: https://everestrestaurantglobalcooking.vercel.app
       - key: SMTP_USER
-        value: mustafoyevdeveloper@gmail.com
+        value: mustafoyevdevelopment@gmail.com
       - key: SMTP_PASS
         value: lwpz wecs fnqr pvgq 

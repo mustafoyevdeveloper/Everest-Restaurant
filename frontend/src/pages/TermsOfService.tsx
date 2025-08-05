@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/Layout/Navbar';
-import Footer from '@/components/Layout/Footer';
 
 const TermsOfService = () => {
   const { t } = useTranslation();
