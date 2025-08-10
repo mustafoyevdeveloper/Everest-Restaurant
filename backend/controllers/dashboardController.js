@@ -34,20 +34,31 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     const thisMonth = new Date();
     thisMonth.setDate(1);
     thisMonth.setHours(0, 0, 0, 0);
+    const lastMonthStart = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 1);
     const monthRevenueData = await Order.aggregate([
       { $match: { isPaid: true, createdAt: { $gte: thisMonth } } },
       { $group: { _id: null, total: { $sum: '$totalPrice' } } }
     ]);
     const monthRevenue = monthRevenueData.length > 0 ? monthRevenueData[0].total : 0;
+
+    // Last month revenue
+    const lastMonthRevenueAgg = await Order.aggregate([
+      { $match: { isPaid: true, createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd } } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]);
+    const lastMonthRevenue = lastMonthRevenueAgg.length > 0 ? lastMonthRevenueAgg[0].total : 0;
     
-    // Get total users
+    // Get total users and new users today
     const totalUsers = await User.countDocuments({ role: 'user' });
+    const newUsers = await User.countDocuments({ role: 'user', createdAt: { $gte: today } });
     
     // Get today's orders
     const todayOrders = await Order.countDocuments({ createdAt: { $gte: today } });
     
     // Get this month's orders
     const monthOrders = await Order.countDocuments({ createdAt: { $gte: thisMonth } });
+    const lastMonthOrders = await Order.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd } });
     
     // Get total products
     const totalProducts = await Product.countDocuments();
@@ -63,6 +74,14 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(5);
     
+    // Get reservations stats
+    const totalReservations = await Reservation.countDocuments();
+    const todayReservations = await Reservation.countDocuments({ createdAt: { $gte: today } });
+    const monthReservations = await Reservation.countDocuments({ createdAt: { $gte: thisMonth } });
+    const lastMonthReservations = await Reservation.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd } });
+    const confirmedReservations = await Reservation.countDocuments({ status: 'Confirmed' });
+    const cancelledReservations = await Reservation.countDocuments({ status: 'Cancelled' });
+
     // Get recent reservations
     const recentReservations = await Reservation.find()
       .sort({ createdAt: -1 })
@@ -99,6 +118,18 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       reservationStatuses[item._id] = item.count;
     });
 
+    // Unread messages count
+    const unreadMessages = await Contact.countDocuments({ read: false });
+
+    // Month-over-month comparisons (percent)
+    const calcMoM = (current, prev) => {
+      if (prev === 0) return current > 0 ? 100 : 0;
+      return Math.round(((current - prev) / prev) * 100);
+    };
+    const ordersMoM = calcMoM(monthOrders, lastMonthOrders);
+    const revenueMoM = calcMoM(monthRevenue, lastMonthRevenue);
+    const reservationsMoM = calcMoM(monthReservations, lastMonthReservations);
+
     res.json({
       success: true,
       data: {
@@ -109,12 +140,27 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         todayRevenue,
         monthRevenue,
         totalUsers,
+        newUsers,
+        unreadMessages,
+        totalReservations,
+        todayReservations,
+        monthReservations,
+        lastMonthReservations,
+        confirmedReservations,
+        cancelledReservations,
         totalProducts,
         recentOrders,
         recentPayments,
         recentReservations,
         orderStatuses,
-        reservationStatuses
+        reservationStatuses,
+        monthOrders,
+        lastMonthOrders,
+        monthRevenue,
+        lastMonthRevenue,
+        ordersMoM,
+        revenueMoM,
+        reservationsMoM
       }
     });
   } catch (error) {

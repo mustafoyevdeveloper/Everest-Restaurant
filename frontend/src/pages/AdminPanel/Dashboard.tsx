@@ -30,6 +30,15 @@ interface DashboardStats {
   totalRevenue: number;
   todayRevenue: number;
   thisMonthRevenue: number;
+  monthOrders?: number;
+  lastMonthOrders?: number;
+  monthRevenue?: number;
+  lastMonthRevenue?: number;
+  monthReservations?: number;
+  lastMonthReservations?: number;
+  ordersMoM?: number;
+  revenueMoM?: number;
+  reservationsMoM?: number;
   pendingOrders: number;
   deliveredOrders: number;
   cancelledOrders: number;
@@ -60,35 +69,52 @@ const AdminDashboard: React.FC = () => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const data = await apiFetch('/admin/dashboard/stats');
-      
+      const apiRes = await apiFetch('/admin/dashboard/stats');
+      const data = apiRes?.data ?? apiRes; // Backend returns { success, data }
+
+      // Calculate totals safely
+      const reservationStatuses = data?.reservationStatuses || {};
+      const totalReservations = Object.values(reservationStatuses).reduce(
+        (sum: number, val: any) => sum + (typeof val === 'number' ? val : 0),
+        0
+      );
+
       // Transform backend data to match frontend interface
       const transformedStats = {
-        totalOrders: data.totalOrders || 0,
-        todayOrders: data.todayOrders || 0,
-        thisMonthOrders: data.monthOrders || 0,
-        totalRevenue: data.totalRevenue || 0,
-        todayRevenue: data.todayRevenue || 0,
-        thisMonthRevenue: data.monthRevenue || 0,
-        pendingOrders: data.orderStatuses?.Pending || 0,
-        deliveredOrders: data.orderStatuses?.Delivered || 0,
-        cancelledOrders: data.orderStatuses?.Cancelled || 0,
-        totalReservations: data.recentReservations?.length || 0,
-        todayReservations: 0, // Will be calculated if needed
-        confirmedReservations: data.reservationStatuses?.Confirmed || 0,
-        cancelledReservations: data.reservationStatuses?.Cancelled || 0,
-        totalUsers: data.totalUsers || 0,
-        newUsers: 0, // Will be calculated if needed
-        unreadMessages: 0, // Will be calculated if needed
-        recentOrders: data.recentOrders || [],
-        recentReservations: data.recentReservations || [],
-        recentCancellations: [], // Will be calculated if needed
+        totalOrders: data?.totalOrders || 0,
+        todayOrders: data?.todayOrders || 0,
+        thisMonthOrders: data?.monthOrders || 0,
+        monthOrders: data?.monthOrders,
+        lastMonthOrders: data?.lastMonthOrders,
+        totalRevenue: data?.totalRevenue || 0,
+        todayRevenue: data?.todayRevenue || 0,
+        thisMonthRevenue: data?.monthRevenue || 0,
+        monthRevenue: data?.monthRevenue,
+        lastMonthRevenue: data?.lastMonthRevenue,
+        ordersMoM: data?.ordersMoM,
+        revenueMoM: data?.revenueMoM,
+        pendingOrders: data?.orderStatuses?.Pending || 0,
+        deliveredOrders: data?.orderStatuses?.Delivered || 0,
+        cancelledOrders: data?.orderStatuses?.Cancelled || 0,
+        totalReservations: data?.totalReservations ?? totalReservations,
+        todayReservations: data?.todayReservations || 0,
+        monthReservations: data?.monthReservations,
+        lastMonthReservations: data?.lastMonthReservations,
+        reservationsMoM: data?.reservationsMoM,
+        confirmedReservations: data?.confirmedReservations ?? (reservationStatuses?.Confirmed || 0),
+        cancelledReservations: data?.cancelledReservations ?? (reservationStatuses?.Cancelled || 0),
+        totalUsers: data?.totalUsers || 0,
+        newUsers: data?.newUsers || 0,
+        unreadMessages: data?.unreadMessages || 0,
+        recentOrders: data?.recentOrders || [],
+        recentReservations: data?.recentReservations || [],
+        recentCancellations: [], // Optional: compute if needed
         statusBreakdown: {
-          orders: data.orderStatuses || {},
-          reservations: data.reservationStatuses || {}
+          orders: data?.orderStatuses || {},
+          reservations: reservationStatuses
         }
       };
-      
+
       setStats(transformedStats);
     } catch (err: any) {
       console.error('Dashboard stats error:', err);
@@ -167,7 +193,12 @@ const AdminDashboard: React.FC = () => {
           <CardContent>
             <div className="text-xl md:text-2xl font-bold">{stats.totalOrders}</div>
             <div className="text-xs text-muted-foreground">{t('admin.dashboard.today')}: {stats.todayOrders}</div>
-            <div className="text-xs text-muted-foreground">{t('admin.dashboard.thisMonth')}: {stats.thisMonthOrders}</div>
+            <div className="text-xs text-muted-foreground">
+              {t('admin.dashboard.thisMonth')}: {stats.thisMonthOrders}
+              {typeof stats.ordersMoM === 'number' && (
+                <span className={`ml-2 ${stats.ordersMoM >= 0 ? 'text-green-600' : 'text-red-500'}`}>({stats.ordersMoM}%)</span>
+              )}
+            </div>
           </CardContent>
         </Card>
 
@@ -179,7 +210,12 @@ const AdminDashboard: React.FC = () => {
           <CardContent>
             <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
             <div className="text-xs text-muted-foreground">{t('admin.dashboard.today')}: {formatCurrency(stats.todayRevenue)}</div>
-            <div className="text-xs text-muted-foreground">{t('admin.dashboard.thisMonth')}: {formatCurrency(stats.thisMonthRevenue)}</div>
+            <div className="text-xs text-muted-foreground">
+              {t('admin.dashboard.thisMonth')}: {formatCurrency(stats.thisMonthRevenue)}
+              {typeof stats.revenueMoM === 'number' && (
+                <span className={`ml-2 ${stats.revenueMoM >= 0 ? 'text-green-600' : 'text-red-500'}`}>({stats.revenueMoM}%)</span>
+              )}
+            </div>
           </CardContent>
         </Card>
 
@@ -191,6 +227,12 @@ const AdminDashboard: React.FC = () => {
           <CardContent>
             <div className="text-xl md:text-2xl font-bold">{stats.totalReservations}</div>
             <div className="text-xs text-muted-foreground">{t('admin.dashboard.today')}: {stats.todayReservations}</div>
+            <div className="text-xs text-muted-foreground">
+              {t('admin.dashboard.thisMonth')}: {stats.monthReservations || 0}
+              {typeof stats.reservationsMoM === 'number' && (
+                <span className={`ml-2 ${stats.reservationsMoM >= 0 ? 'text-green-600' : 'text-red-500'}`}>({stats.reservationsMoM}%)</span>
+              )}
+            </div>
             <div className="text-xs text-muted-foreground">{t('admin.dashboard.confirmed')}: {stats.confirmedReservations}</div>
           </CardContent>
         </Card>
@@ -217,21 +259,21 @@ const AdminDashboard: React.FC = () => {
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.pending')}</span>
-              <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
+              <span className="text-sm font-semibold">
                 {stats.statusBreakdown.orders.Pending || 0}
-              </Badge>
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.delivered')}</span>
-              <Badge variant="outline" className="bg-green-50 text-green-700">
+              <span className="text-sm font-semibold">
                 {stats.statusBreakdown.orders.Delivered || 0}
-              </Badge>
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.cancelled')}</span>
-              <Badge variant="outline" className="bg-red-50 text-red-700">
+              <span className="text-sm font-semibold">
                 {stats.statusBreakdown.orders.Cancelled || 0}
-              </Badge>
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -243,21 +285,21 @@ const AdminDashboard: React.FC = () => {
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.confirmed')}</span>
-              <Badge variant="outline" className="bg-blue-50 text-blue-700">
+              <span className="text-sm font-semibold">
                 {stats.statusBreakdown.reservations.Confirmed || 0}
-              </Badge>
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.cancelled')}</span>
-              <Badge variant="outline" className="bg-red-50 text-red-700">
+              <span className="text-sm font-semibold">
                 {stats.statusBreakdown.reservations.Cancelled || 0}
-              </Badge>
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t('admin.dashboard.total')}</span>
-              <Badge variant="outline">
+              <span className="text-sm font-semibold">
                 {Object.values(stats.statusBreakdown.reservations).reduce((a: number, b: number) => a + b, 0)}
-              </Badge>
+              </span>
             </div>
           </CardContent>
         </Card>
