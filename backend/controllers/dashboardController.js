@@ -4,12 +4,19 @@ import Payment from '../models/Payment.js';
 import Contact from '../models/Contact.js';
 import Product from '../models/Product.js';
 import User from '../models/User.js';
+import NodeCache from 'node-cache';
 import AdminSeen from '../models/AdminSeen.js';
 import AdminNotification from '../models/AdminNotification.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 // Get dashboard statistics
+const cache = new NodeCache({ stdTTL: 30 });
+
 export const getDashboardStats = asyncHandler(async (req, res) => {
+  const cached = cache.get('dashboard_stats');
+  if (cached) {
+    return res.json({ success: true, data: cached });
+  }
   try {
     // Get total orders
     const totalOrders = await Order.countDocuments();
@@ -130,7 +137,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     const revenueMoM = calcMoM(monthRevenue, lastMonthRevenue);
     const reservationsMoM = calcMoM(monthReservations, lastMonthReservations);
 
-    res.json({
+    const payload = {
       success: true,
       data: {
         totalOrders,
@@ -162,7 +169,9 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         revenueMoM,
         reservationsMoM
       }
-    });
+    };
+    cache.set('dashboard_stats', payload.data);
+    res.json(payload);
   } catch (error) {
     console.error('Dashboard stats error:', error);
     res.status(500).json({

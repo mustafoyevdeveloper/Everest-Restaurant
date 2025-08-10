@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -86,6 +87,7 @@ app.use(cors({
 app.options('*', cors());
 
 // Middleware
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
