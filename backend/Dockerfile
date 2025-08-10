@@ -1,13 +1,16 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
 
+# Install OS deps needed for healthcheck and runtime
+RUN apk add --no-cache curl
+
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (omit dev, tolerate lock drift)
+RUN npm install --omit=dev
 
 # Copy source code
 COPY . .
